@@ -103,6 +103,7 @@ ax.legend()
 # Set title
 ax.set_title('World Happiness Score Categories low / medium / high')
 
+# Display the plot using Streamlit
 st.pyplot(fig)
 
 
@@ -111,4 +112,4 @@ st.pyplot(fig)
 if page == pages[2] : 
   st.write("### Modelling")
 
-
+#I added the comment
