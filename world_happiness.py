@@ -112,4 +112,62 @@ st.pyplot(fig)
 if page == pages[2] : 
   st.write("### Modelling")
 
-#I added the comment
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(feats, target, test_size=0.25, random_state=42) #Splitting the data on the train and test sets
+
+cat = ['Regional indicator', 'Country name']
+oneh = OneHotEncoder(drop = 'first', sparse_output = False, handle_unknown = 'ignore')
+
+X_train_encoded = oneh.fit_transform(X_train[cat])
+X_test_encoded = oneh.transform(X_test[cat])
+
+X_train_encoded_df = pd.DataFrame(X_train_encoded, columns=oneh.get_feature_names_out(cat)) 
+X_test_encoded_df = pd.DataFrame(X_test_encoded, columns=oneh.get_feature_names_out(cat)) 
+
+X_train.reset_index(drop=True, inplace=True) 
+y_train.reset_index(drop=True, inplace=True)
+X_test.reset_index(drop=True, inplace=True)
+y_test.reset_index(drop=True, inplace=True)
+
+X_train = pd.concat([X_train.drop(columns=cat), X_train_encoded_df], axis=1) #Concatenate 
+X_test = pd.concat([X_test.drop(columns=cat), X_test_encoded_df], axis=1)#Concatenate 
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+
+def prediction(classifier):
+    if classifier == 'Linear Regressor':
+        clf = LinearRegression()
+    elif classifier == 'Random Forest':
+        clf = RandomForestRegressor()
+    elif classifier == 'Decision Tree':
+        clf = DecisionTreeRegressor(max_depth=3, random_state=42)
+    clf.fit(X_train, y_train)
+    return clf
+def scores(clf, choice):
+    if choice == 'Accuracy':
+        return clf.score(X_test, y_test)
+    elif choice == 'Confusion matrix':
+        return confusion_matrix(y_test, clf.predict(X_test))
+        
+choice = ['Linear Regressor', 'Random Forest', 'Decision Tree']
+option = st.selectbox('Choice of the model', choice)
+st.write('The chosen model is :', option)
+
+clf = prediction(option)
+display = st.radio('What do you want to show ?', ('Accuracy', 'Confusion matrix'))
+if display == 'Accuracy':
+    st.write(scores(clf, display))
+elif display == 'Confusion matrix':
+    st.dataframe(scores(clf, display))
+
