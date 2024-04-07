@@ -171,4 +171,3 @@ if display == 'Accuracy':
 elif display == 'Confusion matrix':
     st.dataframe(scores(clf, display))
 
-#Add a comment
