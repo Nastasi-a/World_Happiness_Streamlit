@@ -150,13 +150,160 @@ X_test = scaler.transform(X_test)
 
 # Load the trained linear regression model
 lr = joblib.load('trained_lr.joblib')
+rf = joblib.load('trained_rf.joblib')
+dt = joblib.load('trained_dt.joblib')
 
 lr_predictions = lr.predict(X_test)
+rf_predictions = rf.predict(X_test)
+dt_predictions = dt.predict(X_test)
 
-# Display R² score on the train set
-st.write('Score on the train set with Linear Regression:', lr.score(X_train, y_train))
+# Display R² score on the train and test set
 
-# Display R² score on the test set
-st.write('Score on the test set with Linear Regression:', lr.score(X_test, y_test))
+choice = ['Linear Regression', 'Random Forest', 'Decision Tree']
+option = st.selectbox('Choice of the model', choice)
+st.write('The chosen model is :', option)
+
+if option == 'Linear Regression':
+  st.write('Score on the train set with Linear Regression:', lr.score(X_train, y_train))
+  st.write('Score on the test set with Linear Regression:', lr.score(X_test, y_test))
+
+elif option == 'Random Forest': 
+  st.write('Score on the train set with Random Forest:', rf.score(X_train, y_train))
+  st.write('Score on the test set with Random Forest:', rf.score(X_test, y_test))
+
+else: 
+  st.write('Score on the train set with Decision Tree:', dt.score(X_train, y_train))
+  st.write('Score on the test set with Decision Tree:', dt.score(X_test, y_test))
+
+
+#Comparison bar plot of R² score of the 3 models.
+
+lr_train_score = lr.score(X_train, y_train)
+lr_test_score = lr.score(X_test, y_test)
+
+rf_train_score = rf.score(X_train, y_train)
+rf_test_score = rf.score(X_test, y_test)
+
+dt_train_score = dt.score(X_train, y_train)
+dt_test_score = dt.score(X_test, y_test)
+
+model_names = ['Linear Regression Train', 'Linear Regression Test', 
+               'Random Forest Train', 'Random Forest Test', 
+               'Decision Tree Train', 'Decision Tree Test']
+
+scores = [lr_train_score, lr_test_score, 
+          rf_train_score, rf_test_score, 
+          dt_train_score, dt_test_score]
+
+df_comparison_models = pd.DataFrame({'Model': model_names, 'Score': scores})
+
+fig = px.bar(df_comparison_models, x='Model', y='Score', color='Model', 
+             color_discrete_map={'Linear Regression Train': 'red', 
+                                 'Linear Regression Test': 'red', 
+                                 'Random Forest Train': 'blue', 
+                                 'Random Forest Test': 'blue', 
+                                 'Decision Tree Train': 'green', 
+                                 'Decision Tree Test': 'green'})
+
+fig.update_layout(
+    title='Performance on Train and Test Sets of all three models',
+    yaxis_title='R² Score',
+    yaxis=dict(range=[0, 1])
+)
+
+st.plotly_chart(fig)
+
+
+#Comparison Boxplot of predictions of three models 
+
+predictions_df = pd.DataFrame({
+    'Linear Regression': lr_predictions.flatten(),
+    'Random Forest': rf_predictions.flatten(),
+    'Decision Tree': dt_predictions.flatten()
+})
+
+fig = px.box(predictions_df.melt(var_name='Model', value_name='Predicted Value'), 
+             x='Model', y='Predicted Value', color='Model',
+             color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'},
+             labels={'Model': 'Model', 'Predicted Value': 'Predicted Value'},
+             title='Distribution of predicted values for the three models')
+
+fig.update_layout(height=600, width=800)
+
+st.plotly_chart(fig)
+
+
+#Scatter plots of Predicted vs. Actual Values with Diagonal Line
+
+fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+
+axs[0].scatter(lr_predictions, y_test, c='red', s=30, marker='o')
+axs[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
+axs[0].set_title('Linear Regression')
+axs[0].set_xlabel('Predicted Values')
+axs[0].set_ylabel('Actual Values')
+
+axs[1].scatter(rf_predictions, y_test, c='blue', s=30, marker='o')
+axs[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the  diagonal line
+axs[1].set_title('Random Forest')
+axs[1].set_xlabel('Predicted Values')
+axs[1].set_ylabel('Actual Values')
+
+axs[2].scatter(dt_predictions, y_test, c='green', s=30, marker='o')
+axs[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
+axs[2].set_title('Decision Tree')
+axs[2].set_xlabel('Predicted Values')
+axs[2].set_ylabel('Actual Values')
+
+plt.subplots_adjust(wspace=0.5)
+fig.suptitle('Scatter plots of Predicted vs. Actual Values with Diagonal Line')
+
+st.pyplot(fig)
+
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+from math import sqrt
+
+lr_mse = mean_squared_error(y_test, lr_predictions)
+lr_rmse = sqrt(lr_mse)
+lr_mae = mean_absolute_error(y_test, lr_predictions)
+
+rf_mse = mean_squared_error(y_test, rf_predictions)
+rf_rmse = sqrt(rf_mse)
+rf_mae = mean_absolute_error(y_test, rf_predictions)
+
+dt_mse = mean_squared_error(y_test, dt_predictions)
+dt_rmse = sqrt(dt_mse)
+dt_mae = mean_absolute_error(y_test, dt_predictions)
+
+#Comparison graph of errors of the 3 models.
+
+data = {
+    'Model': ['Linear Regression', 'Random Forest', 'Decision Tree'],
+    'MSE': [lr_mse, rf_mse, dt_mse],
+    'RMSE': [lr_rmse, rf_rmse, dt_rmse],
+    'MAE': [lr_mae, rf_mae, dt_mae]
+}
+
+df_model_errors = pd.DataFrame(data)
+
+# Plot Mean Squared Error
+fig_mse = px.scatter(df_model_errors, x='Model', y='MSE', color='Model', title='Mean Squared Error for all three models',
+                     labels={'Model': 'Model', 'MSE': 'Mean Squared Error'},
+                     color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
+st.plotly_chart(fig_mse)
+
+# Plot Root Mean Squared Error
+fig_rmse = px.scatter(df_model_errors, x='Model', y='RMSE', color='Model', title='Root Mean Squared Error for all three models',
+                      labels={'Model': 'Model', 'RMSE': 'Root Mean Squared Error'},
+                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
+st.plotly_chart(fig_rmse)
+
+# Plot Mean Absolute Error
+fig_mae = px.scatter(df_model_errors, x='Model', y='MAE', color='Model', title='Mean Absolute Error for all three models',
+                     labels={'Model': 'Model', 'MAE': 'Mean Absolute Error'},
+                     color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
+st.plotly_chart(fig_mae)
 
 
