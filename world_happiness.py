@@ -158,5 +158,5 @@ st.write('Score on the train set with Linear Regression:', lr.score(X_train, y_t
 
 # Display R² score on the test set
 st.write('Score on the test set with Linear Regression:', lr.score(X_test, y_test))
-#comment
+
 
