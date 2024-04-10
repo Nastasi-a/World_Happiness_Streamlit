@@ -403,6 +403,19 @@ if page == pages[5] :
 if page == pages[6] : 
   st.header("Outlook and continuation of the project")
 
+  st.write("The dataset could be utilized to predict other variables such as:")
+  st.write("- **Logged GDP per capita**")
+  st.write("- **Social support**")
+  st.write("- **Healthy life expectancy**")
+  st.write("- **Freedom to make life choices**")
+  st.write("- **Generosity**")
+  st.write("- **Perceptions of corruption**")
+  st.write("- **Positive affect Negative affect**")
+  st.write("- **Negative affect**") 
+  st.write("Each of these variables could be considered as the target variable in separate regression analyses.")
+  st.write("It is feasible to go into a temporal analysis. We could observe trends and changes over time and provide valuable insights into the evolution of happiness scores and related indicators. Before doing it, we need to research and enrich the data for the given period of time.")
+  st.write("In continuation we can experiment with more diverse feature engineering techniques and exploring different feature selection methods  improve model performance and interpretability.")
+  st.write("It is also possible to incorporate external data such as environmental factors, more socio-economic indicators, lifestyle indicators such as work-life balance to see how they interact with existing variables in our analysis. It can provide more complex insights about the exploration of well-being.")
 
 #Creation of Team page
 
