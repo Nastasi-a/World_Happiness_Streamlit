@@ -393,7 +393,10 @@ st.write("By reducing the **number of features** to 14, we managed to mitigate t
 if page == pages[5] : 
   st.header("Difficulties during the project")
  
-st.write()
+st.write("While working on the project, we encountered several difficulties. One of them was the absence of regional data for certain countries, prompting us to seek data from alternative sources")
+st.write("In addition, concerning the dataset, we lacked access to data for all countries for the entire time period (since 2005). Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
+st.write("Due to the absence of data for certain countries, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
+st.write("We encountered issues during the encoding of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
 #Creation of Outlook page
 
 if page == pages[6] : 
