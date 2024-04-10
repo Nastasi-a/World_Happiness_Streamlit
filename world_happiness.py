@@ -10,8 +10,24 @@ df=pd.read_csv("merged_happiness_dataframe.csv")
 
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
-pages=["Framework", "Exploration", "Vizualization", "Modelling", "Interpretation", "Team"]
+pages=["Framework", "Exploration", "Vizualization", "Modelling", "Interpretation", "Difficulties", "Outlook", "Team"]
 page=st.sidebar.radio("Go to", pages)
+
+
+#Creation of Framework page
+
+if page == pages[0] :
+  st.header("Framework")
+
+  st.write("We started with two dataframes in our project:")
+
+  st.write("- **world-happiness-report-2021:** This dataset includes data on world happiness for the year 2021.")
+  st.write("- **world-happiness-report:** This dataset includes information about world happiness before 2021.")
+
+  st.write("The goal of the project was to analyze the world's happiness score and how it is influenced by certain indicators. We observed how it has developed in the past and predicted the future trend. The data is freely available for analysis [here](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021).")
+
+  st.write("In the first step we have explored the data, cleaned and merged our dataframes. In this streamlit app, we are working with the merged and cleaned dataset called **merged_happiness_dataframe**.")
+
 
 
 #Creation of Exploration page
@@ -19,9 +35,36 @@ page=st.sidebar.radio("Go to", pages)
 if page == pages[1] :
   st.header("Exploration of data")
 
+  st.subheader('Columns')
+
+  table_data = {
+    "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
+               "Social support", "Healthy life expectancy", "Freedom to make life choices", "Generosity",
+               "Perceptions of corruption", "Positive affect", "Negative affect"],
+    "Description": ["Name of the country.",
+                    "Region where the country is located.",
+                    "Year of the data.",
+                    "Happiness score based on the Gallup World Poll (GWP). It represents respondents' life evaluations on a scale from 0 to 10.",
+                    "GDP per capita adjusted for population size.",
+                    "Measure of having someone to count on in times of trouble.",
+                    "Average number of healthy years a person can expect to live.",
+                    "Measure of satisfaction with personal freedom.",
+                    "Measure of charitable giving relative to GDP per capita.",
+                    "Measure of perceived corruption in government and businesses.",
+                    "Average of happiness, laughter, and enjoyment experienced.",
+                    "Average of worry, sadness, and anger experienced."]}
+
+  df_columns = pd.DataFrame(table_data)
+  st.table(df_columns.set_index("Column"))
+  
+  st.subheader('Dataframe')
+
   st.dataframe(df.head(10))
 
+  st.subheader('Shape')
   st.write(df.shape)
+
+  st.subheader('Statistics')
   st.dataframe(df.describe())
 
   if st.checkbox("Show NA") :
@@ -61,6 +104,9 @@ if page == pages[2] :
   st.plotly_chart(fig)
 
 #Creating 'Ladder score category' variable in the 2021 dataframe with the values 'ladder score low', 'ladder score medium' and 'ladder score high' with the help of the quantiles.
+  
+  st.write("\n\n\n")
+  st.write('**World map with Ladder Score Categories**')
 
   def category(ladder_score, q1, q3):
     if ladder_score < q1:
@@ -169,13 +215,34 @@ if page == pages[3] :
     st.write('Score on the train set with Linear Regression:', lr.score(X_train, y_train))
     st.write('Score on the test set with Linear Regression:', lr.score(X_test, y_test))
 
+    st.write("\n\n\n")
+
+    lr_coefficients = lr.coef_[0] 
+    fig = px.bar(lr_coefficients)
+    fig.update_layout(title='Coefficients')
+    st.plotly_chart(fig)
+
+    st.write("The coefficients show how the target variable (y) changes with a one-unit increase in the explanatory variable (x), while keeping all other variables constant. For instance, a coefficient of -0.00238972 means y decreases by this amount with a one-unit increase in x. Conversely, a coefficient of 0.85110927 signifies y increases by this amount with the same change in x. These coefficients represent the relationships between the target and explanatory variables.")
+    
   elif option == 'Random Forest': 
     st.write('Score on the train set with Random Forest:', rf.score(X_train, y_train))
     st.write('Score on the test set with Random Forest:', rf.score(X_test, y_test))
+    st.write("\n\n")
+    st.write("The Random Forest model seems to be overfitted. It performs really well on the training set but poorly on the unseen data.")
 
   else: 
     st.write('Score on the train set with Decision Tree:', dt.score(X_train, y_train))
     st.write('Score on the test set with Decision Tree:', dt.score(X_test, y_test))
+
+    from sklearn.tree import plot_tree
+    
+    X_train = pd.DataFrame(X_train)
+    feature_names = list(X_train.columns)
+    plt.figure(figsize=(20,10))
+    plot_tree(dt,filled=True, feature_names=feature_names)
+    st.pyplot(plt.gcf())  
+  
+  st.write("\n\n\n")
 
   if st.checkbox("Comparison of the three models"):
     
@@ -307,3 +374,31 @@ if page == pages[3] :
     st.plotly_chart(fig_mae)
 
 
+#Creation of Interpretation page
+
+if page == pages[4] : 
+  st.header("Interpretation of results")
+
+
+#Creation of Difficulties page
+
+if page == pages[5] : 
+  st.header("Difficulties during the project")
+
+
+#Creation of Outlook page
+
+if page == pages[6] : 
+  st.header("Outlook and continuation of the project")
+
+
+#Creation of Team page
+
+if page == pages[7] : 
+  st.header("Team")
+
+  st.write("This project was led by three data analysts:")
+
+  st.write("**Anastasiia Burtseva**, [LinkedIn](https://www.linkedin.com/in/anastasiia-burtseva-69bba9289/)")
+  st.write("**Annika Heintz-Saad**, [LinkedIn](https://www.linkedin.com/in/annika-heintz-saad-79791b72/)")
+  st.write("**Belal**")
