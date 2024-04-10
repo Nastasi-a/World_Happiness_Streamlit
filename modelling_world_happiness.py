@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+import os
+print(os.getcwd())
+
 df=pd.read_csv("merged_happiness_dataframe.csv")
 
 from sklearn.preprocessing import OneHotEncoder
