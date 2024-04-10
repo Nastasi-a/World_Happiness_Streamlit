@@ -105,7 +105,6 @@ if page == pages[2] :
 
 #Creating 'Ladder score category' variable in the 2021 dataframe with the values 'ladder score low', 'ladder score medium' and 'ladder score high' with the help of the quantiles.
 
- st.write("\n\n\n")
  st.write('**The heatmap for the world happiness report**')
 # Calculating of the correlation matrix
 cor = merged_df.iloc[:, 1:12].corr()
