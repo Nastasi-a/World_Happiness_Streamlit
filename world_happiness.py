@@ -380,8 +380,8 @@ if page == pages[3] :
 
 if page == pages[4] : 
   st.header("Interpretation of results")
-  
-  t.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
+
+  st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
 
   st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
 
