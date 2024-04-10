@@ -380,23 +380,23 @@ if page == pages[3] :
 
 if page == pages[4] : 
   st.header("Interpretation of results")
-st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
+  t.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
 
-st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
+  st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
 
-st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+  st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
 
-st.write("By reducing the **number of features** to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
+  st.write("By reducing the **number of features** to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
 
 #Creation of Difficulties page
 
 if page == pages[5] : 
   st.header("Difficulties during the project")
  
-st.write("While working on the project, we encountered several difficulties. One of them was the absence of regional data for certain countries, prompting us to seek data from alternative sources")
-st.write("In addition, concerning the dataset, we lacked access to data for all countries for the entire time period (since 2005). Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
-st.write("Due to the absence of data for certain countries, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
-st.write("We encountered issues during the encoding of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
+  st.write("While working on the project, we encountered several difficulties. One of them was the absence of regional data for certain countries, prompting us to seek data from alternative sources")
+  st.write("In addition, concerning the dataset, we lacked access to data for all countries for the entire time period (since 2005). Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
+  st.write("Due to the absence of data for certain countries, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
+  st.write("We encountered issues during the encoding of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
 #Creation of Outlook page
 
 if page == pages[6] : 
