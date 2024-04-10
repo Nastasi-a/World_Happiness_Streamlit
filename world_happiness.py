@@ -380,20 +380,20 @@ if page == pages[3] :
 
 if page == pages[4] : 
   st.header("Interpretation of results")
-st.write("In summary, we explored three distinct supervised learning models for our dataset: Linear Regression, Random Forest Regression, and Decision Tree Regression. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
+st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
 
-st.write("Both Linear Regression and Random Forest show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
+st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
 
-st.write("We have carried out hyperparameter tuning. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
 
-st.write("By reducing the number of features to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
+st.write("By reducing the **number of features** to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
 
 #Creation of Difficulties page
 
 if page == pages[5] : 
   st.header("Difficulties during the project")
-
-
+ 
+st.write()
 #Creation of Outlook page
 
 if page == pages[6] : 
