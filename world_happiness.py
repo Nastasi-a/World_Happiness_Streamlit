@@ -401,4 +401,4 @@ if page == pages[7] :
 
   st.write("**Anastasiia Burtseva**, [LinkedIn](https://www.linkedin.com/in/anastasiia-burtseva-69bba9289/)")
   st.write("**Annika Heintz-Saad**, [LinkedIn](https://www.linkedin.com/in/annika-heintz-saad-79791b72/)")
-  st.write("**Belal**")
+  st.write("**Belal Mahmud**, [LinkedIn](https://www.linkedin.com/in/belal-mahmud-394b22113/)")
