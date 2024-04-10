@@ -104,13 +104,7 @@ if page == pages[2] :
   st.plotly_chart(fig)
 
 #Creating 'Ladder score category' variable in the 2021 dataframe with the values 'ladder score low', 'ladder score medium' and 'ladder score high' with the help of the quantiles.
-# Generating the heatmap
-cor = merged_df.iloc[:, 1:12].corr()
-fig, ax = plt.subplots(figsize =(8,8))
-sns.heatmap(cor, annot = True, ax = ax, cmap = 'Spectral')
-plt.title('The heatmap for the world happiness report')
-# Display the plot
-st.pyplot(fig)
+
 
 
   st.write("\n\n\n")
