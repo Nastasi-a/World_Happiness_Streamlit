@@ -165,7 +165,28 @@ if page == pages[2] :
   plt.title('The heatmap for the world happiness report')
   st.pyplot(fig)
 
-
+  st.write("\n\n\n")
+  st.write('**Positive affect**')
+#Creating a filtered dataframe
+  df_filtered_first = df[df['year'] == 2021]
+  df_filtered = df_filtered_first.sort_values(by='Positive affect', ascending=True).tail(10)
+  df_filtered.head(10)
+#Creating a horizontal barplot
+  df_filtered = df_filtered_first.sort_values(by='Positive affect', ascending=False).head(10) #Creating filtered DataFrame with sorted values according to our needs
+  fig = px.bar(df_filtered,
+             x='Positive affect',
+             y='Country name',
+             orientation='h',
+             title='Countries with the highest Positive affect in 2021',
+             labels={'Positive affect': 'Positive Affect', 'Country name': 'Country Name'},
+             height=500,
+             width=800,
+             color='Positive affect',
+             color_continuous_scale='greens',
+             opacity=0.8
+            )
+  fig.update_layout(yaxis=dict(autorange="reversed")) # Reverse the order of countries on the y-axis
+   st.pyplot(fig)
 #Creation of Modelling page
 
 if page == pages[3] : 
