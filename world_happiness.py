@@ -230,7 +230,8 @@ if page == pages[2] :
   ax.legend(title='Regional Indicator', loc='center left', bbox_to_anchor=(1, 0.5))
 # Display the Matplotlib figure in Streamlit
   st.pyplot(fig) 
-
+  st.write("\n\n\n")
+  st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig, ax = plt.subplots(figsize=(12, 6))
   sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=2, order=regional_indicators, ax=ax)
