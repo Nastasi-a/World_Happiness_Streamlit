@@ -229,16 +229,13 @@ if page == pages[2] :
 # Display the Matplotlib figure in Streamlit
   st.pyplot(fig) 
 
-  st.write("\n\n\n")
-  st.write("**Distribution of Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
-  fig = plt.figure(figsize=(20, 6))
-  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=2, order=regional_indicators)
-  plt.xlabel('Regional Indicator')
-  plt.ylabel('Ladder Score')
-  plt.xticks(rotation=45, ha='right')
-  plt.legend().remove()
-
+  fig, ax = plt.subplots(figsize=(12, 6))
+  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=2, order=regional_indicators, ax=ax)
+  ax.set_xlabel('Regional Indicator')
+  ax.set_ylabel('Ladder Score')
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+  ax.legend().remove()
   st.pyplot(fig)
 #Creation of Modelling page
 
