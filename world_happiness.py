@@ -551,10 +551,18 @@ if page == pages[6] :
   st.write("It is feasible to go into a temporal analysis. We could observe trends and changes over time and provide valuable insights into the evolution of happiness scores and related indicators. Before doing it, we need to research and enrich the data for the given period of time.")
   st.image('images/graph.png')
   st.write("In continuation we can experiment with more diverse feature engineering techniques and exploring different feature selection methods  improve model performance and interpretability.")
-  st.image('images/11.png', width = 50)
-  st.image('images/22.png', width = 50)
-  st.image('images/33.png', width = 50)
-  st.image('images/44.png', width = 50)
+  col1, col2, col3, col4 = st.beta_columns(4)
+  with col1:
+    st.image('images/11.png', width=80)
+
+  with col2:
+    st.image('images/22.png', width=80)
+
+  with col3:
+    st.image('images/33.png', width=80)
+
+  with col4:
+    st.image('images/44.png', width=80)
   st.write("It is also possible to incorporate external data such as environmental factors, more socio-economic indicators, lifestyle indicators such as work-life balance to see how they interact with existing variables in our analysis. It can provide more complex insights about the exploration of well-being.")
   st.image('images/4.jpeg')
 
