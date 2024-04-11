@@ -213,11 +213,11 @@ if page == pages[2] :
   pairplot = sns.pairplot(correlation_2021, kind='reg')
   st.pyplot(pairplot.fig)
 
-   st.write("\n\n\n")
-   st.write("**Distribution of Ladder Score in 2021**")
-   #Plot to show the distribution of the ladder score in 2021.
-   fig = px.box (df_2021, x = 'Ladder score') 
-    st.plotly_chart(fig)
+  st.write("\n\n\n")
+  st.write("**Distribution of Ladder Score in 2021**")
+#Plot to show the distribution of the ladder score in 2021.
+  fig = px.box (df_2021, x = 'Ladder score') 
+  st.plotly_chart(fig)
 #Creation of Modelling page
 
 if page == pages[3] : 
