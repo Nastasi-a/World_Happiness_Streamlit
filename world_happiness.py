@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 df=pd.read_csv("merged_happiness_dataframe.csv")
-df["year"] = df["year"].astype(str)
+df["year"] = pd.to_datetime(df["year"], format='%Y')
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
 pages=["Framework", "Exploration", "Vizualization", "Modelling", "Interpretation", "Difficulties", "Outlook", "Team"]
