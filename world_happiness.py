@@ -167,7 +167,7 @@ if page == pages[2] :
   sns.heatmap(cor, annot = True, ax = ax, cmap = 'Spectral')
   plt.title('The heatmap for the world happiness report')
   st.pyplot(fig)
-  st.write("On the heatmap above we can observe the highest correlation between Healthy life expectancy and Logged GDP per capita. It can be explained, because a strong economy of a country leads people to live better and longer lives. \n We can also notice the most correlated variables to the Ladder score: Healthy life expectancy, Social Support and Logged GDP per capita. Hence, economics, social support and life expectancy influences on the Ladder score more than the other indicators.")
+  st.write("On the heatmap above we can observe the highest correlation between Healthy life expectancy and Logged GDP per capita. It can be explained, because a strong economy of a country leads people to live better and longer lives. \n We can also notice the most correlated variables to the Ladder score: Healthy life expectancy, Social Support and Logged GDP per capita. Hence, economics, social support and life expectancy influences on the Ladder score more than the other indicators. We can also observe the highest negative correlation among all the given variables between Perceptions of corruption and Freedom to make life choices, which means that corruption perceptions are inversely linked to the sense of freedom individuals and experience in making life decisions.")
   st.write("\n\n\n")
 #Creating a filtered dataframe
   df_filtered_first = df[df['year'] == 2021]
@@ -215,7 +215,7 @@ if page == pages[2] :
   correlation_2021 = df_filtered_first[['Positive affect', 'Negative affect']]
   pairplot = sns.pairplot(correlation_2021, kind='reg')
   st.pyplot(pairplot.fig)
-
+  st.write('On the pairplot above we can see a negative correlation between the Positive affect and the Negative affect. Thats why we can conclude that as Positive affect scores increase for a particular country, Negative affect scores tend to decrease, and vice versa.')
   st.write("\n\n\n")
   st.write("**Distribution of Ladder Score in 2021**")
 #Plot to show the distribution of the ladder score in 2021.
