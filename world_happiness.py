@@ -497,9 +497,9 @@ if page == pages[4] :
   rmse_before = [lr_rmse, rf_rmse, dt_rmse]
   mae_before = [lr_mae, rf_mae, dt_mae]
 
-  mae_after = [mae_best, mae_best_rf, mae_best_dt]
-  mse_after = [mse_best, mse_best_rf, mse_best_dt]
-  mse_after = [rmse_best, rmse_best_rf, rmse_best_dt]
+  mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
+  mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
+  mse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
 
   fig_mae = go.Figure()
   fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
