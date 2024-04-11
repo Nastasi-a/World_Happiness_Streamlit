@@ -7,7 +7,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 df=pd.read_csv("merged_happiness_dataframe.csv")
-df["year"] = df["year"].astype(int)
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
 pages=["Framework", "Exploration", "Vizualization", "Modelling", "Interpretation", "Difficulties", "Outlook", "Team"]
@@ -61,7 +60,7 @@ if page == pages[1] :
   st.table(df_columns.set_index("Data"))
   st.subheader('Dataframe')
 
-  st.dataframe(df.head(10),  dtype={'year': 'int'})
+  st.dataframe(df.head(10))
 
   st.subheader('Shape')
   st.write(df.shape)
