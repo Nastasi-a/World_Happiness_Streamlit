@@ -58,11 +58,7 @@ if page == pages[1] :
   
   
   df_columns = pd.DataFrame(table_data)
-  html_emojis = [f'<span style="color:black">{emoji}</span>' for emoji in df_columns["Data"]]
-  df_columns["Data"] = html_emojis
   st.table(df_columns.set_index("Data"))
-  st.write(df_columns.set_index("Data").style.set_properties(**{'text-align': 'left'}), unsafe_allow_html=True)
-  
   st.subheader('Dataframe')
 
   st.dataframe(df.head(10))
