@@ -232,7 +232,7 @@ if page == pages[2] :
   st.write("\n\n\n")
   st.write("**Distribution of Ladder Score by Regional Indicator**")
   plt.figure(figsize=(12, 6))
-  sns.boxplot(x='Regional indicator', y='Ladder score', data=merged_df, hue='Regional indicator')
+  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator')
   plt.title('Distribution of Ladder Score by Regional Indicator')
   plt.xlabel('Regional Indicator')
   plt.ylabel('Ladder Score')
