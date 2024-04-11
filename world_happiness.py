@@ -478,7 +478,7 @@ if page == pages[4] :
   rf_mse = 0.14
   dt_mse = 0.33
   lr_mae = 0.29
-  fr_mae = 0.28
+  rf_mae = 0.28
   dt_mae = 0.45
   lr_rmse = 0.4
   rf_rmse = 0.37
