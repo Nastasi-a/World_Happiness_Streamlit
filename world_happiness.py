@@ -37,7 +37,7 @@ if page == pages[1] :
   st.header("Exploration of data")
 
   st.subheader('Columns')
-
+  
   table_data = {
     "📊": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
     "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
@@ -55,7 +55,8 @@ if page == pages[1] :
                     "Measure of perceived corruption in government and businesses.",
                     "Average of happiness, laughter, and enjoyment experienced.",
                     "Average of worry, sadness, and anger experienced."]}
-
+  for data in table_data:
+      st.write(data, text_color='black')
 
   df_columns = pd.DataFrame(table_data)
   st.table(df_columns.set_index("📊"))
