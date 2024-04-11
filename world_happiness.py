@@ -82,8 +82,9 @@ if page == pages[2] :
 #Bar plot to show the distribution of the Ladder score in 2021.
 
   df_2021 = df[df['year'] == 2021]
+  df_filtered_1 = df_2021.sort_values(by='Ladder score', ascending=False) #Creating filtered DataFrame with sorted values according to our needs
 
-  fig = px.bar(df_2021, x='Country name', y='Ladder score')
+  fig = px.bar(df_filtered_1, x='Country name', y='Ladder score')
   fig.update_layout(title='Ladder Score in 2021 by Country')
   st.plotly_chart(fig)
 
