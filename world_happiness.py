@@ -237,7 +237,7 @@ if page == pages[2] :
   plt.xlabel('Regional Indicator')
   plt.ylabel('Ladder Score')
   plt.xticks(rotation=45, ha='right')
-  plt.show()
+  st.pyplot() 
 
 #Creation of Modelling page
 
