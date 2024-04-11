@@ -474,6 +474,25 @@ if page == pages[4] :
   st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
   #Creating graphs to show errors after hyperparameter tuning
   models = ['Linear Regression', 'Random Forest','Decision Tree']
+  lr_mse = 0.16
+  rf_mse = 0.14
+  dt_mse = 0.33
+  lr_mae = 0.29
+  fr_mae = 0.28
+  dt_mae = 0.45
+  lr_rmse = 0.4
+  rf_rmse = 0.37
+  dt_rmse = 0.57
+  mae_best_lr = 0.30
+  mae_best_rf = 0.34
+  mae_best_dt = 0.57
+  mse_best_lr = 0.16
+  mse_best_rf = 0.2
+  mse_best_dt = 0.5
+  rmse_best_lr = 0.4
+  rmse_best_rf = 0.4
+  rmse_best_dt = 0.4
+
   mse_before = [lr_mse, rf_mse, dt_mse]
   rmse_before = [lr_rmse, rf_rmse, dt_rmse]
   mae_before = [lr_mae, rf_mae, dt_mae]
