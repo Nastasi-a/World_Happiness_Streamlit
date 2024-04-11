@@ -166,7 +166,6 @@ if page == pages[2] :
   st.pyplot(fig)
 
   st.write("\n\n\n")
-  st.write('**Positive affect**')
 #Creating a filtered dataframe
   df_filtered_first = df[df['year'] == 2021]
   df_filtered = df_filtered_first.sort_values(by='Positive affect', ascending=True).tail(10)
@@ -187,6 +186,28 @@ if page == pages[2] :
             )
   fig.update_layout(yaxis=dict(autorange="reversed")) # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
+
+  st.write("\n\n\n")
+
+  df_filtered = df_filtered_first.sort_values(by='Negative affect', ascending=False).head(10)#Creating filtered DataFrame with sorted values according to our needs
+#Creating a horizontal barplot
+  fig = px.bar(df_filtered,
+             x='Negative affect',
+             y='Country name',
+             orientation='h',
+             title='Countries with the highest Negative affect in 2021',
+             labels={'Negative affect': 'Negative Affect', 'Country name': 'Country Name'},
+             height=500,
+             width=800,
+             color='Negative affect',
+             color_continuous_scale='oranges',
+             opacity=0.8
+            )
+
+  fig.update_layout(yaxis=dict(autorange="reversed"))  # Reverse the order of countries on the y-axis
+  st.plotly_chart(fig)
+
+
 #Creation of Modelling page
 
 if page == pages[3] : 
