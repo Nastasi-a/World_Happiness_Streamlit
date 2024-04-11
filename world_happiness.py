@@ -42,6 +42,7 @@ if page == pages[1] :
     "Column": ["🌍 Country name", "🌐 Regional indicator", "📅 Year", "⭐Ladder score", "💰Logged GDP per capita",
                "🤝 Social support", "🏥 Healthy life expectancy", "🔓Freedom to make life choices", "🎁Generosity",
                "🔍 Perceptions of corruption", "😊Positive affect", "😞 Negative affect"],
+  st.write(table_data, text_color='black')
     "Description": ["Name of the country.",
                     "Region where the country is located.",
                     "Year of the data.",
