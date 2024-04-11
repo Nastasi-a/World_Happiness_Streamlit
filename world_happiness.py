@@ -553,7 +553,7 @@ if page == pages[6] :
   st.write("In continuation we can experiment with more diverse feature engineering techniques and exploring different feature selection methods  improve model performance and interpretability.")
   
   st.write("It is also possible to incorporate external data such as environmental factors, more socio-economic indicators, lifestyle indicators such as work-life balance to see how they interact with existing variables in our analysis. It can provide more complex insights about the exploration of well-being.")
-  st.image('images/4.jpeg')
+  st.image('images/4.jpeg', width = 150)
 
 #Creation of Team page
 
