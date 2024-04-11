@@ -236,6 +236,9 @@ if page == pages[2] :
   plt.title('Distribution of Ladder Score by Regional Indicator')
   plt.xlabel('Regional Indicator')
   plt.ylabel('Ladder Score')
+  plt.xticks(rotation=45, ha='right')
+  plt.legend().remove()
+
   st.pyplot(fig)
 #Creation of Modelling page
 
