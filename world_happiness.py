@@ -235,7 +235,7 @@ if page == pages[2] :
   sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator')
   ax.set_xlabel('Regional Indicator')
   ax.set_ylabel('Ladder Score')
-  ax.set_xticklabels(rotation=45, ha='right')
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right') 
   st.pyplot(fig) 
 
 #Creation of Modelling page
