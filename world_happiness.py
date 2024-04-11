@@ -76,7 +76,7 @@ if page == pages[1] :
 #Creation of Data Vizualization page
 
 if page == pages[2] : 
-  st.header("Data Vizualization")
+  st.header("Data Vizualization 🎨")
 
 
 #Bar plot to show the distribution of the Ladder score in 2021.
@@ -244,7 +244,7 @@ if page == pages[2] :
 #Creation of Modelling page
 
 if page == pages[3] : 
-  st.header("Modelling")
+  st.header("Modelling🛠️ ")
 
 
 
@@ -465,7 +465,7 @@ if page == pages[3] :
 #Creation of Interpretation page
 
 if page == pages[4] : 
-  st.header("Interpretation of results")
+  st.header("Interpretation of results🔍")
 
   st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
 
@@ -527,7 +527,7 @@ if page == pages[4] :
 #Creation of Difficulties page
 
 if page == pages[5] : 
-  st.header("Difficulties during the project")
+  st.header("Difficulties during the project⚙️")
  
   st.write("While working on the project, we encountered several difficulties. One of them was the absence of regional data for certain countries, prompting us to seek data from alternative sources")
   st.write("In addition, concerning the dataset, we lacked access to data for all countries for the entire time period (since 2005). Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
@@ -536,7 +536,7 @@ if page == pages[5] :
 #Creation of Outlook page
 
 if page == pages[6] : 
-  st.header("Outlook and continuation of the project")
+  st.header("Outlook and continuation of the project📝")
 
   st.write("The dataset could be utilized to predict other variables such as:")
   st.write("- **Logged GDP per capita**")
