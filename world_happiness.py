@@ -154,6 +154,9 @@ if page == pages[2] :
 # Display the plot using Streamlit
   st.pyplot(fig)
 
+  st.write("\n\n\n")
+  st.write('**The correlation heatmap**')
+
 #Creating a correlation matrix
   cor = df.iloc[:, 1:12].corr()
 #Creating a heatmap
