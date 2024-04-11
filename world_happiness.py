@@ -39,11 +39,9 @@ if page == pages[1] :
   st.subheader('Columns')
 
   table_data = {
-    "Column": ["🌍 Country name", "🌐 Regional indicator", "📅 Year", "⭐ Ladder score", "💰 Logged GDP per capita",
-               "🤝 Social support", "🏥 Healthy life expectancy", "🔓 Freedom to make life choices", "🎁 Generosity",
-               "🔍 Perceptions of corruption", "😊 Positive affect", "😞 Negative affect"]
-}
-  st.write(table_data, text_color='black')
+    "Column": ["🌍 Country name", "🌐 Regional indicator", "📅 Year", "⭐Ladder score", "💰Logged GDP per capita",
+               "🤝 Social support", "🏥 Healthy life expectancy", "🔓Freedom to make life choices", "🎁Generosity",
+               "🔍 Perceptions of corruption", "😊Positive affect", "😞 Negative affect"],
     "Description": ["Name of the country.",
                     "Region where the country is located.",
                     "Year of the data.",
@@ -56,6 +54,7 @@ if page == pages[1] :
                     "Measure of perceived corruption in government and businesses.",
                     "Average of happiness, laughter, and enjoyment experienced.",
                     "Average of worry, sadness, and anger experienced."]}
+  st.write(table_data, text_color='black')
 
   df_columns = pd.DataFrame(table_data)
   st.table(df_columns.set_index("Column"))
