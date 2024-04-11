@@ -480,7 +480,7 @@ if page == pages[4] :
   lr_mae = 0.29
   rf_mae = 0.28
   dt_mae = 0.45
-  lr_rmse = 0.4
+  lr_rmse = 0.39
   rf_rmse = 0.37
   dt_rmse = 0.57
   mae_best_lr = 0.30
