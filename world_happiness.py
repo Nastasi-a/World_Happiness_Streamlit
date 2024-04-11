@@ -39,7 +39,7 @@ if page == pages[1] :
   st.subheader('Columns')
   
   table_data = {
-    "📊": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
+    "": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
     "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
                "Social support", "Healthy life expectancy", "Freedom to make life choices", "Generosity",
                "Perceptions of corruption", "Positive affect", "Negative affect"],
@@ -55,11 +55,10 @@ if page == pages[1] :
                     "Measure of perceived corruption in government and businesses.",
                     "Average of happiness, laughter, and enjoyment experienced.",
                     "Average of worry, sadness, and anger experienced."]}
-  for data in table_data:
-      st.markdown(f'<span style="color:black">{data}</span>', unsafe_allow_html=True)
+  
 
   df_columns = pd.DataFrame(table_data)
-  st.table(df_columns.set_index("📊"))
+  st.table(df_columns.set_index(" "))
   
   st.subheader('Dataframe')
 
