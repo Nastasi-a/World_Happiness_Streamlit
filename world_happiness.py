@@ -18,7 +18,7 @@ page=st.sidebar.radio("Go to", pages)
 
 if page == pages[0] :
   st.image('images/happiness.png')
-  st.header("Framework")
+  st.header("Framework 📐")
 
   st.write("We started with two dataframes in our project:")
 
@@ -558,7 +558,7 @@ if page == pages[6] :
 #Creation of Team page
 
 if page == pages[7] : 
-  st.header("Team")
+  st.header("Team🚀")
 
   st.write("This project was led by three data analysts:")
 
