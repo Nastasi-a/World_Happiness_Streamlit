@@ -221,12 +221,13 @@ if page == pages[2] :
 
   st.write("\n\n\n")
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
-  plt.figure(figsize=(12, 6))
-  lineplot = sns.lineplot(x='year', y='Ladder score', hue='Regional indicator',errorbar=None,data=df, marker='o')
-  plt.xlabel('Year')
-  plt.ylabel('Ladder Score')
-  plt.legend(title='Regional Indicator', loc='center left', bbox_to_anchor=(1, 0.5))
-  st.pyplot(lineplot)
+  fig, ax = plt.subplots(figsize=(12, 6))
+  sns.lineplot(x='year', y='Ladder score', hue='Regional indicator', errorbar=None, data=df, marker='o', ax=ax)
+  ax.set_xlabel('Year')
+  ax.set_ylabel('Ladder Score')
+  ax.legend(title='Regional Indicator', loc='center left', bbox_to_anchor=(1, 0.5))
+# Display the Matplotlib figure in Streamlit
+  st.pyplot(fig) 
 
 #Creation of Modelling page
 
