@@ -34,7 +34,7 @@ if page == pages[0] :
 #Creation of Exploration page
 
 if page == pages[1] :
-  st.header("Exploration of data")
+  st.header("Exploration of data📊")
 
   st.subheader('Columns')
   
