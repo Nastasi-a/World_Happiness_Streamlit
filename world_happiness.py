@@ -211,7 +211,7 @@ if page == pages[2] :
   st.write("The pairplot which shows the correlation between Positive and Negative affect")
   correlation_2021 = df_filtered_first[['Positive affect', 'Negative affect']]
   sns.pairplot(correlation_2021, kind = 'reg')
-  st.pyplot()
+  st.pyplot(pairplot.fig)
 #Creation of Modelling page
 
 if page == pages[3] : 
