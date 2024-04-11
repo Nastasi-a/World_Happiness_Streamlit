@@ -186,7 +186,7 @@ if page == pages[2] :
              opacity=0.8
             )
   fig.update_layout(yaxis=dict(autorange="reversed")) # Reverse the order of countries on the y-axis
-   st.pyplot(fig)
+   fig.show()
 #Creation of Modelling page
 
 if page == pages[3] : 
