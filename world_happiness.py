@@ -39,7 +39,7 @@ if page == pages[1] :
   st.subheader('Columns')
   
   table_data = {
-    "📊": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
+    "Data": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
     "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
                "Social support", "Healthy life expectancy", "Freedom to make life choices", "Generosity",
                "Perceptions of corruption", "Positive affect", "Negative affect"],
@@ -56,9 +56,12 @@ if page == pages[1] :
                     "Average of happiness, laughter, and enjoyment experienced.",
                     "Average of worry, sadness, and anger experienced."]}
   
-
+  
   df_columns = pd.DataFrame(table_data)
-  st.table(df_columns.set_index("📊"))
+  html_emojis = [f'<span style="color:black">{emoji}</span>' for emoji in df_columns["Data"]]
+  df_columns["Data"] = html_emojis
+  st.table(df_columns.set_index("Data").to_html(escape=False), unsafe_allow_html=True)
+  
   
   st.subheader('Dataframe')
 
