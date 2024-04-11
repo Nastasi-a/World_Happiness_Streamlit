@@ -499,7 +499,7 @@ if page == pages[4] :
 
   mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
   mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
-  mse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
+  rmse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
 
   fig_mae = go.Figure()
   fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
