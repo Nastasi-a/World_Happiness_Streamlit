@@ -39,7 +39,7 @@ if page == pages[1] :
   st.subheader('Columns')
 
   table_data = {
-    "📊":  ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"]
+    "📊": ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"],
     "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
                "Social support", "Healthy life expectancy", "Freedom to make life choices", "Generosity",
                "Perceptions of corruption", "Positive affect", "Negative affect"],
