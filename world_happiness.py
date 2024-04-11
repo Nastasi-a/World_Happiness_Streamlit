@@ -58,7 +58,7 @@ if page == pages[1] :
   
 
   df_columns = pd.DataFrame(table_data)
-  st.table(df_columns.set_index(" "))
+  st.table(df_columns.set_index("Column"))
   
   st.subheader('Dataframe')
 
