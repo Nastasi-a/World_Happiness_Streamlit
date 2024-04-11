@@ -167,7 +167,7 @@ if page == pages[2] :
   sns.heatmap(cor, annot = True, ax = ax, cmap = 'Spectral')
   plt.title('The heatmap for the world happiness report')
   st.pyplot(fig)
-
+  st.write("On the heatmap above we can observe the highest correlation between Healthy life expectancy and Logged GDP per capita. It can be explained, because a strong economy of a country leads people to live better and longer lives. We can also notice the most correlated variables to the Ladder score: Healthy life expectancy, Social Support and Logged GDP per capita. Hence, economics, social support and life expectancy influences on the Ladder score more than the other indicators.")
   st.write("\n\n\n")
 #Creating a filtered dataframe
   df_filtered_first = df[df['year'] == 2021]
