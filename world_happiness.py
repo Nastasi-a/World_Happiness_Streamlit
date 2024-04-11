@@ -39,9 +39,10 @@ if page == pages[1] :
   st.subheader('Columns')
 
   table_data = {
-    "Column": ["🌍 Country name", "🌐 Regional indicator", "📅 Year", "⭐Ladder score", "💰Logged GDP per capita",
-               "🤝 Social support", "🏥 Healthy life expectancy", "🔓Freedom to make life choices", "🎁Generosity",
-               "🔍 Perceptions of corruption", "😊Positive affect", "😞 Negative affect"],
+    "📊":  ["🌍", "🌐", "📅", "⭐", "💰", "🤝", "🏥", "🔓", "🎁", "🔍", "😊", "😞"]
+    "Column": ["Country name", "Regional indicator", "Year", "Ladder score", "Logged GDP per capita",
+               "Social support", "Healthy life expectancy", "Freedom to make life choices", "Generosity",
+               "Perceptions of corruption", "Positive affect", "Negative affect"],
     "Description": ["Name of the country.",
                     "Region where the country is located.",
                     "Year of the data.",
@@ -57,7 +58,7 @@ if page == pages[1] :
 
 
   df_columns = pd.DataFrame(table_data)
-  st.table(df_columns.set_index("Column"))
+  st.table(df_columns.set_index("📊"))
   
   st.subheader('Dataframe')
 
