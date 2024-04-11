@@ -17,6 +17,7 @@ page=st.sidebar.radio("Go to", pages)
 #Creation of Framework page
 
 if page == pages[0] :
+  st.image('images/happiness.png')
   st.header("Framework")
 
   st.write("We started with two dataframes in our project:")
