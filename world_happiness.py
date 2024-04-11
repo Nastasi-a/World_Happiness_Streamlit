@@ -218,6 +218,16 @@ if page == pages[2] :
 #Plot to show the distribution of the ladder score in 2021.
   fig = px.box (df_2021, x = 'Ladder score') 
   st.plotly_chart(fig)
+
+  st.write("\n\n\n")
+  st.write("**Development of the Ladder Score over years for each Regional Indicator**")
+  plt.figure(figsize=(12, 6))
+  lineplot = sns.lineplot(x='year', y='Ladder score', hue='Regional indicator',errorbar=None,data=df, marker='o')
+  plt.xlabel('Year')
+  plt.ylabel('Ladder Score')
+  plt.legend(title='Regional Indicator', loc='center left', bbox_to_anchor=(1, 0.5))
+  st.pyplot(lineplot)
+
 #Creation of Modelling page
 
 if page == pages[3] : 
