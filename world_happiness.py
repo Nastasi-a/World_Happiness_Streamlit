@@ -156,7 +156,7 @@ if page == pages[2] :
 
 # Display the plot using Streamlit
   st.pyplot(fig)
-  st.write("You can see some white parts on the world map. Those are the countries that are missing completely in the data set as we had to delete them due to too many missing values. \n This map easily shows that most green countries are in North America, Western Europe and Australia. Some exceptions are: Mexico, Guatemala, Brazil, Uruguay, Cuba and Saudi Arabia. Most yellow countries are in Asia, Eastern Europe, South America and North Africa. Some exceptions are: Portugal and South Africa. All of the red countries are in Africa except for: India, Myanmar, Cambodia, Iran, Afghanistan, Syria, Yemen and Haiti. \n You can get a sense from these graphs that most countries with a high Ladder score are developed countries / high-income countries, whereas most countries with low Ladder score are developing or least developed countries. Therefore, we can assume that GDP per capita plays a big role for the Ladder score.")
+  st.write("You can see some white parts on the world map. Those are the countries that are missing completely in the data set as we had to delete them due to too many missing values. Countries filled with green have the highest Ladder scores, yellow color displays middle values, and red - lowest. \n\n You can get a sense from these graphs that most countries with a high Ladder score are developed countries / high-income countries, whereas most countries with low Ladder score are developing or least developed countries. Therefore, we can assume that GDP per capita plays a big role for the Ladder score.")
   st.write("\n\n\n")
   st.write('**The correlation heatmap**')
 
