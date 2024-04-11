@@ -472,6 +472,36 @@ if page == pages[4] :
   st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
 
   st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+  #Creating graphs to show errors after hyperparameter tuning
+  models = ['Linear Regression', 'Random Forest','Decision Tree']
+  mse_before = [lr_mse, rf_mse, dt_mse]
+  rmse_before = [lr_rmse, rf_rmse, dt_rmse]
+  mae_before = [lr_mae, rf_mae, dt_mae]
+
+  mae_after = [mae_best, mae_best_rf, mae_best_dt]
+  mse_after = [mse_best, mse_best_rf, mse_best_dt]
+  mse_after = [rmse_best, rmse_best_rf, rmse_best_dt]
+
+  fig_mae = go.Figure()
+  fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
+  fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
+  fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
+
+  fig_mse = go.Figure()
+  fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
+  fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
+  fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
+
+  fig_rmse = go.Figure()
+  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
+  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
+  fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
+
+  st.plotly_chart(fig_mae, use_container_width=True)
+  st.plotly_chart(fig_mse, use_container_width=True)
+  st.plotly_chart(fig_rmse, use_container_width=True)
+
+
 
   st.write("By reducing the **number of features** to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
 
