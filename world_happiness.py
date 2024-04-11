@@ -61,7 +61,7 @@ if page == pages[1] :
   st.table(df_columns.set_index("Data"))
   st.subheader('Dataframe')
 
-  st.dataframe(df.head(10))
+  st.dataframe(df.head(10),  dtype={'year': 'int'})
 
   st.subheader('Shape')
   st.write(df.shape)
