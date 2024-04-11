@@ -56,7 +56,7 @@ if page == pages[1] :
                     "Average of happiness, laughter, and enjoyment experienced.",
                     "Average of worry, sadness, and anger experienced."]}
   for data in table_data:
-      st.write(data, text_color='black')
+      st.markdown(f'<span style="color:black">{data}</span>', unsafe_allow_html=True)
 
   df_columns = pd.DataFrame(table_data)
   st.table(df_columns.set_index("📊"))
