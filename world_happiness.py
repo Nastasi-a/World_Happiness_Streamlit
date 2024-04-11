@@ -207,7 +207,11 @@ if page == pages[2] :
   fig.update_layout(yaxis=dict(autorange="reversed"))  # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
 
-
+  st.write("\n\n\n")
+  st.write("The pairplot which shows the correlation between Positive and Negative affect")
+  correlation_2021 = df_filtered_first[['Positive affect', 'Negative affect']]
+  sns.pairplot(correlation_2021, kind = 'reg')
+  st.pyplot(fig)
 #Creation of Modelling page
 
 if page == pages[3] : 
