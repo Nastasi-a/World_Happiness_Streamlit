@@ -154,6 +154,14 @@ if page == pages[2] :
 # Display the plot using Streamlit
   st.pyplot(fig)
 
+#Creating a correlation matrix
+  cor = merged_df.iloc[:, 1:12].corr()
+#Creating a heatmap
+  fig, ax = plt.subplots(figsize =(8,8))
+  sns.heatmap(cor, annot = True, ax = ax, cmap = 'Spectral')
+  plt.title('The heatmap for the world happiness report')
+  st.pyplot(fig)
+
 
 #Creation of Modelling page
 
