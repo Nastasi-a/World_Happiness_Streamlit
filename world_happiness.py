@@ -10,7 +10,7 @@ df=pd.read_csv("merged_happiness_dataframe.csv")
 df["year"] = df["year"].astype(int)
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
-pages=["Framework", "Vizualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
+pages=["Framework", "Visualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
 page=st.sidebar.radio("Go to", pages)
 
 
@@ -60,10 +60,10 @@ if page == pages[0] :
   st.write(df.shape)
 
 
-#Creation of Data Vizualization page
+#Creation of Data Visualization page
 
 if page == pages[1] : 
-  st.header("Data Vizualization 🎨")
+  st.header("Data Visualization 🎨")
 
   st.subheader('Statistics')
   st.dataframe(df.describe())
