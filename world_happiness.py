@@ -10,7 +10,7 @@ df=pd.read_csv("merged_happiness_dataframe.csv")
 df["year"] = df["year"].astype(int)
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
-pages=["Framework", "Exploration", "Vizualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
+pages=["Framework", "Vizualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
 page=st.sidebar.radio("Go to", pages)
 
 
@@ -28,13 +28,6 @@ if page == pages[0] :
   st.write("The goal of the project was to analyze the world's happiness score and how it is influenced by certain indicators. We observed how it has developed in the past and predicted the future trend. The data is freely available for analysis [here](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021).")
 
   st.write("In the first step we have explored the data, cleaned and merged our dataframes. In this streamlit app, we are working with the merged and cleaned dataset called **merged_happiness_dataframe**.")
-
-
-
-#Creation of Exploration page
-
-if page == pages[1] :
-  st.header("Exploration of data 📊")
 
   st.subheader('Columns')
   
@@ -66,18 +59,17 @@ if page == pages[1] :
   st.subheader('Shape')
   st.write(df.shape)
 
+
+#Creation of Data Vizualization page
+
+if page == pages[1] : 
+  st.header("Data Vizualization 🎨")
+
   st.subheader('Statistics')
   st.dataframe(df.describe())
 
   if st.checkbox("Show NA") :
     st.dataframe(df.isna().sum())
-
-
-#Creation of Data Vizualization page
-
-if page == pages[2] : 
-  st.header("Data Vizualization 🎨")
-
 
 #Bar plot to show the distribution of the Ladder score in 2021.
 
@@ -295,7 +287,7 @@ rf_predictions = rf.predict(X_test)
 dt_predictions = dt.predict(X_test)
 
 
-if page == pages[3] : 
+if page == pages[2] : 
   st.header("Modelling 🛠️ ")
 
 # Display R² score on the train and test set
@@ -437,7 +429,7 @@ if page == pages[3] :
 
 #Creation of Comparison page
 
-if page == pages[4] : 
+if page == pages[3] : 
   st.header("Comparison of models ⚖️")
 
   #Comparison bar plot of R² score of the 3 models.
@@ -629,7 +621,7 @@ if page == pages[4] :
 
 #Creation of Interpretation page
 
-if page == pages[5] : 
+if page == pages[4] : 
   st.header("Interpretation of results 🔍")
 
   st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
@@ -645,7 +637,7 @@ if page == pages[5] :
 
 #Creation of Difficulties page
 
-if page == pages[6] : 
+if page == pages[5] : 
   st.header("Difficulties during the project ⚙️")
  
   st.write("While working on the project, we encountered several difficulties. One of them was the **absence of regional data** for certain countries, prompting us to seek data from alternative sources")
@@ -654,7 +646,7 @@ if page == pages[6] :
   st.write("We encountered **issues during the encoding** of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
 #Creation of Outlook page
 
-if page == pages[7] : 
+if page == pages[6] : 
   st.header("Outlook and continuation of the project 📝")
 
   st.subheader ("Prediction of other variables")
@@ -685,7 +677,7 @@ if page == pages[7] :
 
 #Creation of Team page
 
-if page == pages[8] : 
+if page == pages[7] : 
   st.header("Team 🚀")
 
   st.write("This project was led by three data analysts:")
