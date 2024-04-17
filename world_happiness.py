@@ -10,8 +10,14 @@ df=pd.read_csv("merged_happiness_dataframe.csv")
 df["year"] = df["year"].astype(int)
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
-pages=["Framework", "Visualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
+pages=["Framework", "Visualization", "Modelling", "Comparison", "Interpretation", "Outlook"]
 page=st.sidebar.radio("Go to", pages)
+
+st.sidebar.write("\n\n\n\n\n")
+st.sidebar.subheader("Team 🚀") 
+st.sidebar.write("- [**Anastasiia Burtseva**](https://www.linkedin.com/in/anastasiia-burtseva-69bba9289/)")
+st.sidebar.write("- [**Annika Heintz-Saad**](https://www.linkedin.com/in/annika-heintz-saad-79791b72/)")
+st.sidebar.write("- [**Belal Mahmud**](https://www.linkedin.com/in/belal-mahmud-394b22113/)")
 
 
 #Creation of Framework page
@@ -29,6 +35,10 @@ if page == pages[0] :
 
   st.write("In the first step we have explored the data, cleaned and merged our dataframes. In this streamlit app, we are working with the merged and cleaned dataset called **merged_happiness_dataframe**.")
 
+  st.subheader('Shape')
+  st.write(df.shape)
+  st.write("Our dataset consists of 2083 rows and 12 columns")
+  
   st.subheader('Columns')
   
   table_data = {
@@ -56,8 +66,8 @@ if page == pages[0] :
 
   st.dataframe(df.head(10))
 
-  st.subheader('Shape')
-  st.write(df.shape)
+  if st.checkbox("Show NA") :
+    st.dataframe(df.isna().sum())
 
 
 #Creation of Data Visualization page
@@ -68,8 +78,8 @@ if page == pages[1] :
   st.subheader('Statistics')
   st.dataframe(df.describe())
 
-  if st.checkbox("Show NA") :
-    st.dataframe(df.isna().sum())
+  st.write("We need to write something here about the statistics!")
+  st.write("\n\n\n\n\n")
 
 #Bar plot to show the distribution of the Ladder score in 2021.
 
@@ -79,6 +89,7 @@ if page == pages[1] :
   fig = px.bar(df_filtered_1, x='Country name', y='Ladder score')
   fig.update_layout(title='Ladder Score in 2021 by Country')
   st.plotly_chart(fig)
+  st.write("This barplot shows the Ladder Score in 2021 for every country available in the dataset.")
 
 #Comparison bar plots between countries with highest and lowest 'Ladder score' in 2021.
 
@@ -98,9 +109,11 @@ if page == pages[1] :
 
   st.plotly_chart(fig)
 
+  st.write("These are the Top10 countries with the highest Ladder Score and the Last10 countries with the lowest Ladder Score.")
+
 #Creating 'Ladder score category' variable in the 2021 dataframe with the values 'ladder score low', 'ladder score medium' and 'ladder score high' with the help of the quantiles.
 
-  st.write("\n\n\n")
+  st.write("\n\n\n\n\n")
   st.write('**World map with Ladder Score Categories**')
 
   def category(ladder_score, q1, q3):
@@ -147,7 +160,9 @@ if page == pages[1] :
 # Display the plot using Streamlit
   st.pyplot(fig)
   st.write("You can see some white parts on the world map. Those are the countries that are missing completely in the data set as we had to delete them due to too many missing values. Countries filled with green have the highest Ladder scores, yellow color displays middle values, and red - lowest. \n\n You can get a sense from these graphs that most countries with a high Ladder score are developed countries / high-income countries, whereas most countries with low Ladder score are developing or least developed countries. Therefore, we can assume that GDP per capita plays a big role for the Ladder score.")
-  st.write("\n\n\n")
+  
+  
+  st.write("\n\n\n\n\n")
   st.write('**The correlation heatmap**')
 
 #Creating a correlation matrix
@@ -158,7 +173,8 @@ if page == pages[1] :
   plt.title('The heatmap for the world happiness report')
   st.pyplot(fig)
   st.write("On the heatmap above we can observe the highest correlation between Healthy life expectancy and Logged GDP per capita. It can be explained, because a strong economy of a country leads people to live better and longer lives. \n We can also notice the most correlated variables to the Ladder score: Healthy life expectancy, Social Support and Logged GDP per capita. Hence, economics, social support and life expectancy influences on the Ladder score more than the other indicators. We can also observe the highest negative correlation among all the given variables between Perceptions of corruption and Freedom to make life choices, which means that corruption perceptions are inversely linked to the sense of freedom individuals and experience in making life decisions.")
-  st.write("\n\n\n")
+  st.write("\n\n\n\n\n")
+
 #Creating a filtered dataframe
   df_filtered_first = df[df['year'] == 2021]
   df_filtered = df_filtered_first.sort_values(by='Positive affect', ascending=True).tail(10)
@@ -180,7 +196,7 @@ if page == pages[1] :
   fig.update_layout(yaxis=dict(autorange="reversed")) # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
 
-  st.write("\n\n\n")
+  st.write("\n\n\n\n\n")
 
   df_filtered = df_filtered_first.sort_values(by='Negative affect', ascending=False).head(10)#Creating filtered DataFrame with sorted values according to our needs
 #Creating a horizontal barplot
@@ -200,19 +216,24 @@ if page == pages[1] :
   fig.update_layout(yaxis=dict(autorange="reversed"))  # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
 
-  st.write("\n\n\n")
+  st.write("\n\n\n\n\n")
   st.write("**The pairplot which shows the correlation between Positive and Negative affect**")
   correlation_2021 = df_filtered_first[['Positive affect', 'Negative affect']]
   pairplot = sns.pairplot(correlation_2021, kind='reg')
   st.pyplot(pairplot.fig)
   st.write('On the pairplot above we can see a negative correlation between the Positive affect and the Negative affect. Thats why we can conclude that as Positive affect scores increase for a particular country, Negative affect scores tend to decrease, and vice versa.')
-  st.write("\n\n\n")
+  
+  st.write("\n\n\n\n\n")
+
   st.write("**Distribution of Ladder Score in 2021**")
 #Plot to show the distribution of the ladder score in 2021.
   fig = px.box (df_2021, x = 'Ladder score') 
   st.plotly_chart(fig)
 
-  st.write("\n\n\n")
+  st.write("We need to write something here about the boxplot!")
+
+
+  st.write("\n\n\n\n\n")
   
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
   
@@ -225,7 +246,7 @@ if page == pages[1] :
 
   st.write("Various regions began recording happiness scores at different times. Sub-Saharan, Commonwealth of Independent States, and South Asian countries started in 2006. North America leads in happiness scores, followed closely by Latin America and the Caribbean. In contrast, Sub-Saharan and South Asian countries have the lowest rankings, with Sub-Saharan nations leading in this aspect.")
 
-  st.write("\n\n\n")
+  st.write("\n\n\n\n\n")
   st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig, ax = plt.subplots(figsize=(12, 6))
@@ -288,7 +309,7 @@ dt_predictions = dt.predict(X_test)
 
 
 if page == pages[2] : 
-  st.header("Modelling 🛠️ ")
+  st.header("Modelling ⚙️")
 
 # Display R² score on the train and test set
 
@@ -638,17 +659,15 @@ if page == pages[4] :
 #Creation of Difficulties page
 
 if page == pages[5] : 
-  st.header("Difficulties during the project ⚙️")
+  st.header("Recap and Outlook 📝")
  
-  st.write("While working on the project, we encountered several difficulties. One of them was the **absence of regional data** for certain countries, prompting us to seek data from alternative sources")
-  st.write("In addition, concerning the dataset, we **lacked access to data for all countries for the entire time period (since 2005)**. Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
-  st.write("Due to the **absence of data for certain countries**, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
-  st.write("We encountered **issues during the encoding** of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
-#Creation of Outlook page
+  st.subheader ("Difficulties during the project")
+  st.write("- **Absence of regional data for certain countries**: prompting us to seek data from alternative sources.")
+  st.write("- **Lacked access to data for all countries for the entire time period (since 2005)**: We created data visualizations specifically for 2021, which is the most recent and data-enriched year.")
+  st.write("- **Absence of data for certain countries**: we had to remove several rows containing numerous NaN values to avoid erroneous conclusions.")
+  st.write("- **Issues during the encoding of our dataframe**: When encoding categorical features and creating a new dataframe, we encountered issues with inconsistent indices starting from 0. To resolve this, we used the reset_index function to ensure consistency when concatenating with the original dataframe containing numerical features.")
 
-if page == pages[6] : 
-  st.header("Outlook and continuation of the project 📝")
-
+  st.write("\n\n\n")
   st.subheader ("Prediction of other variables")
   st.write("The dataset could be utilized to predict other variables such as:")
   st.write("- **Logged GDP per capita**")
@@ -675,13 +694,3 @@ if page == pages[6] :
   st.write("It is also possible to incorporate external data such as environmental factors, more socio-economic indicators, lifestyle indicators such as work-life balance to see how they interact with existing variables in our analysis. It can provide more complex insights about the exploration of well-being.")
   st.image('images/4.jpeg', width = 150)
 
-#Creation of Team page
-
-if page == pages[7] : 
-  st.header("Team 🚀")
-
-  st.write("This project was led by three data analysts:")
-
-  st.write("**Anastasiia Burtseva**, [LinkedIn](https://www.linkedin.com/in/anastasiia-burtseva-69bba9289/)")
-  st.write("**Annika Heintz-Saad**, [LinkedIn](https://www.linkedin.com/in/annika-heintz-saad-79791b72/)")
-  st.write("**Belal Mahmud**, [LinkedIn](https://www.linkedin.com/in/belal-mahmud-394b22113/)")
