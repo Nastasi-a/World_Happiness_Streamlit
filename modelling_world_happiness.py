@@ -70,3 +70,26 @@ import joblib
 joblib.dump(lr, 'trained_lr.joblib')
 joblib.dump(rf, 'trained_rf.joblib')
 joblib.dump(dt, 'trained_dt.joblib')
+
+
+X_train = pd.DataFrame(X_train)
+X_test = pd.DataFrame(X_test)
+
+rf_feature_importance_df = pd.DataFrame({
+    'Feature': X_train.columns,
+    'Importance': rf.feature_importances_})
+
+rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
+
+importance_threshold = 0.0019
+
+selected_features = rf_feature_importance_df[rf_feature_importance_df['Importance'] >= importance_threshold]['Feature']
+
+X_train_selected = X_train[selected_features]
+X_test_selected = X_test[selected_features]
+
+rf_selected = RandomForestRegressor()
+rf_selected.fit(X_train_selected, y_train)
+
+joblib.dump(rf_selected, 'trained_rf_selected.joblib')
+

@@ -223,14 +223,18 @@ if page == pages[2] :
   st.plotly_chart(fig)
 
   st.write("\n\n\n")
+  
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
+  
   fig, ax = plt.subplots(figsize=(12, 6))
   sns.lineplot(x='year', y='Ladder score', hue='Regional indicator', errorbar=None, data=df, marker='o', ax=ax)
   ax.set_xlabel('Year')
   ax.set_ylabel('Ladder Score')
   ax.legend(title='Regional Indicator', loc='center left', bbox_to_anchor=(1, 0.5))
-# Display the Matplotlib figure in Streamlit
   st.pyplot(fig) 
+
+  st.write("Various regions began recording happiness scores at different times. Sub-Saharan, Commonwealth of Independent States, and South Asian countries started in 2006. North America leads in happiness scores, followed closely by Latin America and the Caribbean. In contrast, Sub-Saharan and South Asian countries have the lowest rankings, with Sub-Saharan nations leading in this aspect.")
+
   st.write("\n\n\n")
   st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
@@ -241,12 +245,14 @@ if page == pages[2] :
   ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
   ax.legend().remove()
   st.pyplot(fig)
+
+  st.write("The graph above displays the happiness ladder score based on the regional indicator. The results are consistent with previous findings, showing minimal deviation. However, some outliers are noticeable in the graph due to variations in the starting year of recording the ladder score across different regions in our dataset.")
+
+
 #Creation of Modelling page
 
 if page == pages[3] : 
   st.header("Modelling🛠️ ")
-
-
 
   import joblib
   from sklearn.linear_model import LinearRegression
@@ -297,11 +303,12 @@ if page == pages[3] :
 
   choice = ['Linear Regression', 'Random Forest', 'Decision Tree']
   option = st.selectbox('Choice of the model', choice)
-  st.write('The chosen model is :', option)
+  st.write('**The chosen model is :**', option)
 
   if option == 'Linear Regression':
-    st.write('Score on the train set with Linear Regression:', lr.score(X_train, y_train))
-    st.write('Score on the test set with Linear Regression:', lr.score(X_test, y_test))
+    st.write("\n\n\n")
+    st.write('R² Score on the train set with Linear Regression:', lr.score(X_train, y_train))
+    st.write('R² Score on the test set with Linear Regression:', lr.score(X_test, y_test))
 
     st.write("\n\n\n")
 
@@ -313,14 +320,112 @@ if page == pages[3] :
     st.write("The coefficients show how the target variable (y) changes with a one-unit increase in the explanatory variable (x), while keeping all other variables constant. For instance, a coefficient of -0.00238972 means y decreases by this amount with a one-unit increase in x. Conversely, a coefficient of 0.85110927 signifies y increases by this amount with the same change in x. These coefficients represent the relationships between the target and explanatory variables.")
     
   elif option == 'Random Forest': 
-    st.write('Score on the train set with Random Forest:', rf.score(X_train, y_train))
-    st.write('Score on the test set with Random Forest:', rf.score(X_test, y_test))
+    st.write("\n\n\n")
+    st.write('R² Score on the train set with Random Forest:', rf.score(X_train, y_train))
+    st.write('R² Score on the test set with Random Forest:', rf.score(X_test, y_test))
     st.write("\n\n")
     st.write("The Random Forest model seems to be overfitted. It performs really well on the training set but poorly on the unseen data.")
+   
+    st.write("\n\n\n")
+   
+    X_train = pd.DataFrame(X_train)
+    X_test = pd.DataFrame(X_test)
+
+    rf_feature_importance_df = pd.DataFrame({
+      'Feature': X_train.columns,
+      'Importance': rf.feature_importances_})
+
+    rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
+
+    fig = px.bar(rf_feature_importance_df, x='Feature', y='Importance', labels={'Importance': 'Importance', 'Feature': 'Feature'}, title='Random Forest Feature Importances')
+    st.plotly_chart(fig)
+
+    importance_threshold = 0.0019
+
+    selected_features = rf_feature_importance_df[rf_feature_importance_df['Importance'] >= importance_threshold]['Feature']
+
+    X_train_selected = X_train[selected_features]
+    X_test_selected = X_test[selected_features]
+
+    rf_selected = joblib.load('trained_rf_selected.joblib')
+
+    rf_selected_predictions = rf_selected.predict(X_test_selected)
+
+    st.write('R² Score on the train set with Random Forest with reduced features:', rf_selected.score(X_train_selected, y_train))
+    st.write('R² Score on the test set with Random Forest with reduced features:', rf_selected.score(X_test_selected, y_test))
+
+    st.write("\n\n\n")
+    
+    st.write('**Shape before and after feature reduction:**')
+    st.write(X_train.shape)
+    st.write(X_train_selected.shape)
+    st.write("After the feature selection process only 15 features are left instead of 177.")
+
+    rf_train_score = rf.score(X_train, y_train)
+    rf_test_score = rf.score(X_test, y_test)
+
+    rf_train_selected_score = rf_selected.score(X_train_selected, y_train)
+    rf_test_selected_score = rf_selected.score(X_test_selected, y_test)
+
+    labels = ['Random Forest Train', 'Random Forest Train w/ reduced features', 'Random Forest Test', 'Random Forest Test w/ reduced features']
+    scores = [rf_train_score, rf_train_selected_score, rf_test_score, rf_test_selected_score]
+    colors = ['blue', 'orange', 'blue', 'orange']
+
+    fig = go.Figure(data=[go.Bar(x=labels, y=scores, marker_color=colors)])
+    fig.update_layout(title='Performance on Train and Test Sets of Random Forest with all and reduced features',
+                  xaxis_title='Dataset',
+                  yaxis_title='R² Score',
+                  yaxis=dict(range=[0, 1]))
+
+    st.plotly_chart(fig)
+
+
+    st.write("Reducing the features of Random Forest leads to almost the same results in the R² score. And it lowers the complexity of the model immensly.")
+
+    from sklearn.metrics import mean_absolute_error
+
+    rf_mae = mean_absolute_error(y_test, rf_predictions)
+    rf_selected_mae = mean_absolute_error(y_test, rf_selected_predictions )
+
+    labels = ['rf_mae', 'rf_selected_mae']
+    mae_values = [rf_mae, rf_selected_mae]
+    colors = ['blue', 'orange']
+
+    fig = go.Figure(data=go.Scatter(x=labels, y=mae_values, mode='markers', marker=dict(color=colors)))
+    fig.update_layout(title='MAE of Random Forest before and after feature reduction',
+                  xaxis_title='Model',
+                  yaxis_title='Mean Absolute Error',
+                  showlegend=False,
+                  template='plotly_white')
+
+    st.plotly_chart(fig)
+
+    st.write ("The MAE is now a little bit higher after getting rid of a number of features.")
+
+    X_train_selected = pd.DataFrame(X_train_selected)
+    X_test_selected = pd.DataFrame(X_test_selected)
+
+    rf_feature_importance_df_selected = pd.DataFrame({
+        'Feature': X_train_selected.columns,
+        'Importance': rf_selected.feature_importances_})
+
+    rf_feature_importance_df_selected = rf_feature_importance_df_selected.sort_values(by='Importance', ascending=False)
+
+    fig = go.Figure(go.Bar(x=rf_feature_importance_df_selected['Feature'],
+                          y=rf_feature_importance_df_selected['Importance'],
+                          marker_color='blue'))
+    fig.update_layout(title='Random Forest Feature Importances after Feature Reduction',
+                      xaxis_title='Feature',
+                      yaxis_title='Importance',
+                      template='plotly_white')
+    st.plotly_chart(fig)
+
+    st.write("The feature importance graph after feature reduction looks very similar to the original one. That means that the feature reduction has effectively selected the most important features from the dataset. The model seems to be performing well after feature reduction therefore we will go with the new model with only 15 features.")
 
   else: 
-    st.write('Score on the train set with Decision Tree:', dt.score(X_train, y_train))
-    st.write('Score on the test set with Decision Tree:', dt.score(X_test, y_test))
+    st.write("\n\n\n")
+    st.write('R² Score on the train set with Decision Tree:', dt.score(X_train, y_train))
+    st.write('R² Score on the test set with Decision Tree:', dt.score(X_test, y_test))
 
     from sklearn.tree import plot_tree
     
@@ -370,6 +475,8 @@ if page == pages[3] :
 
     st.plotly_chart(fig)
 
+    st.write ("Random Forest performed best on the test set, however it seems to be overfitted to the training set. Linear Regression also performed well in comparison to Decision Tree.")
+
 
 #Comparison Boxplot of predictions of three models 
 
@@ -387,6 +494,7 @@ if page == pages[3] :
     fig.update_layout(height=600, width=800)
 
     st.plotly_chart(fig)
+
 
 
 #Scatter plots of Predicted vs. Actual Values with Diagonal Line
@@ -433,6 +541,8 @@ if page == pages[3] :
     dt_rmse = sqrt(dt_mse)
     dt_mae = mean_absolute_error(y_test, dt_predictions)
 
+    st.write ("The 45-degree diagonal line allows us to assess the accuracy of our models' predictions. It's evident that the dots corresponding to the Random Forest model are the closest to this line, indicating a higher level of accuracy.")
+
 #Comparison graph of errors of the 3 models.
 
     data = {
@@ -461,6 +571,59 @@ if page == pages[3] :
                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
     st.plotly_chart(fig_mae)
 
+    st.write("The accuracy of our predictions correlates with lower error values. Random Forest and Linear Regression have lower errors than Decision Tree, therefore we can say those two are more accurate.")
+    
+    st.write("\n\n\n")
+    st.write ("**Hyperparameter tuning**")
+    st.write("The results of hyperparameter tuning didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+
+    #Creating graphs to show errors after hyperparameter tuning
+    models = ['Linear Regression', 'Random Forest','Decision Tree']
+    lr_mse = 0.16
+    rf_mse = 0.14
+    dt_mse = 0.33
+    lr_mae = 0.29
+    rf_mae = 0.28
+    dt_mae = 0.45
+    lr_rmse = 0.39
+    rf_rmse = 0.37
+    dt_rmse = 0.57
+    mae_best_lr = 0.30
+    mae_best_rf = 0.34
+    mae_best_dt = 0.57
+    mse_best_lr = 0.16
+    mse_best_rf = 0.2
+    mse_best_dt = 0.5
+    rmse_best_lr = 0.4
+    rmse_best_rf = 0.4
+    rmse_best_dt = 0.4
+
+    mse_before = [lr_mse, rf_mse, dt_mse]
+    rmse_before = [lr_rmse, rf_rmse, dt_rmse]
+    mae_before = [lr_mae, rf_mae, dt_mae]
+
+    mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
+    mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
+    rmse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
+
+    fig_mae = go.Figure()
+    fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
+    fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
+    fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
+
+    fig_mse = go.Figure()
+    fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
+    fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
+    fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
+
+    fig_rmse = go.Figure()
+    fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
+    fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
+    fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
+
+    st.plotly_chart(fig_mae, use_container_width=True)
+    st.plotly_chart(fig_mse, use_container_width=True)
+    st.plotly_chart(fig_rmse, use_container_width=True)
 
 #Creation of Interpretation page
 
@@ -471,58 +634,7 @@ if page == pages[4] :
 
   st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
 
-  st.write("We have carried out **hyperparameter tuning**. The results didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
-  #Creating graphs to show errors after hyperparameter tuning
-  models = ['Linear Regression', 'Random Forest','Decision Tree']
-  lr_mse = 0.16
-  rf_mse = 0.14
-  dt_mse = 0.33
-  lr_mae = 0.29
-  rf_mae = 0.28
-  dt_mae = 0.45
-  lr_rmse = 0.39
-  rf_rmse = 0.37
-  dt_rmse = 0.57
-  mae_best_lr = 0.30
-  mae_best_rf = 0.34
-  mae_best_dt = 0.57
-  mse_best_lr = 0.16
-  mse_best_rf = 0.2
-  mse_best_dt = 0.5
-  rmse_best_lr = 0.4
-  rmse_best_rf = 0.4
-  rmse_best_dt = 0.4
-
-  mse_before = [lr_mse, rf_mse, dt_mse]
-  rmse_before = [lr_rmse, rf_rmse, dt_rmse]
-  mae_before = [lr_mae, rf_mae, dt_mae]
-
-  mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
-  mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
-  rmse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
-
-  fig_mae = go.Figure()
-  fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
-  fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
-  fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
-
-  fig_mse = go.Figure()
-  fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
-  fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
-  fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
-
-  fig_rmse = go.Figure()
-  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
-  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
-  fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
-
-  st.plotly_chart(fig_mae, use_container_width=True)
-  st.plotly_chart(fig_mse, use_container_width=True)
-  st.plotly_chart(fig_rmse, use_container_width=True)
-
-
-
-  st.write("By reducing the **number of features** to 14, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
+  st.write("By reducing the **number of features** to 15, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
 
 #Creation of Difficulties page
 
