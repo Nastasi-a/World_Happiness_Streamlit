@@ -10,7 +10,7 @@ df=pd.read_csv("merged_happiness_dataframe.csv")
 df["year"] = df["year"].astype(int)
 st.title("World Happiness Report")
 st.sidebar.title("Table of contents")
-pages=["Framework", "Exploration", "Vizualization", "Modelling", "Interpretation", "Difficulties", "Outlook", "Team"]
+pages=["Framework", "Exploration", "Vizualization", "Modelling", "Comparison", "Interpretation", "Difficulties", "Outlook", "Team"]
 page=st.sidebar.radio("Go to", pages)
 
 
@@ -34,7 +34,7 @@ if page == pages[0] :
 #Creation of Exploration page
 
 if page == pages[1] :
-  st.header("Exploration of data📊")
+  st.header("Exploration of data 📊")
 
   st.subheader('Columns')
   
@@ -107,8 +107,6 @@ if page == pages[2] :
   st.plotly_chart(fig)
 
 #Creating 'Ladder score category' variable in the 2021 dataframe with the values 'ladder score low', 'ladder score medium' and 'ladder score high' with the help of the quantiles.
-
-
 
   st.write("\n\n\n")
   st.write('**World map with Ladder Score Categories**')
@@ -251,53 +249,54 @@ if page == pages[2] :
 
 #Creation of Modelling page
 
-if page == pages[3] : 
-  st.header("Modelling🛠️ ")
+import joblib
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
 
-  import joblib
-  from sklearn.linear_model import LinearRegression
-  from sklearn.preprocessing import OneHotEncoder
-  from sklearn.model_selection import train_test_split
+feats = df.drop(['Ladder score'], axis=1)
+target = df[['Ladder score']]
 
-  feats = df.drop(['Ladder score'], axis=1)
-  target = df[['Ladder score']]
+X_train, X_test, y_train, y_test = train_test_split(feats, target, test_size=0.25, random_state=42) #Splitting the data on the train and test sets
 
-  X_train, X_test, y_train, y_test = train_test_split(feats, target, test_size=0.25, random_state=42) #Splitting the data on the train and test sets
+cat = ['Regional indicator', 'Country name']
+oneh = OneHotEncoder(drop = 'first', sparse_output = False, handle_unknown = 'ignore')
 
-  cat = ['Regional indicator', 'Country name']
-  oneh = OneHotEncoder(drop = 'first', sparse_output = False, handle_unknown = 'ignore')
+X_train_encoded = oneh.fit_transform(X_train[cat])
+X_test_encoded = oneh.transform(X_test[cat])
 
-  X_train_encoded = oneh.fit_transform(X_train[cat])
-  X_test_encoded = oneh.transform(X_test[cat])
+X_train_encoded_df = pd.DataFrame(X_train_encoded, columns=oneh.get_feature_names_out(cat)) #Creating of a new dataframe
+X_test_encoded_df = pd.DataFrame(X_test_encoded, columns=oneh.get_feature_names_out(cat)) #Creating of a new dataframe
 
-  X_train_encoded_df = pd.DataFrame(X_train_encoded, columns=oneh.get_feature_names_out(cat)) #Creating of a new dataframe
-  X_test_encoded_df = pd.DataFrame(X_test_encoded, columns=oneh.get_feature_names_out(cat)) #Creating of a new dataframe
+X_train.reset_index(drop=True, inplace=True) #Resetting of indices to avoid not matching indices while concatenation
+y_train.reset_index(drop=True, inplace=True)
+X_test.reset_index(drop=True, inplace=True)
+y_test.reset_index(drop=True, inplace=True)
 
-  X_train.reset_index(drop=True, inplace=True) #Resetting of indices to avoid not matching indices while concatenation
-  y_train.reset_index(drop=True, inplace=True)
-  X_test.reset_index(drop=True, inplace=True)
-  y_test.reset_index(drop=True, inplace=True)
-
-  X_train = pd.concat([X_train.drop(columns=cat), X_train_encoded_df], axis=1) #Concatenate encoded categorical features with other features in X_test
-  X_test = pd.concat([X_test.drop(columns=cat), X_test_encoded_df], axis=1)#Concatenate encoded categorical features with other features in X_train
+X_train = pd.concat([X_train.drop(columns=cat), X_train_encoded_df], axis=1) #Concatenate encoded categorical features with other features in X_test
+X_test = pd.concat([X_test.drop(columns=cat), X_test_encoded_df], axis=1)#Concatenate encoded categorical features with other features in X_train
 
 #Scaling numerical variables.
 
-  from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler
 
-  scaler = StandardScaler()
+scaler = StandardScaler()
 
-  X_train = scaler.fit_transform(X_train)
-  X_test = scaler.transform(X_test)
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
 # Load the trained linear regression model
-  lr = joblib.load('trained_lr.joblib')
-  rf = joblib.load('trained_rf.joblib')
-  dt = joblib.load('trained_dt.joblib')
+lr = joblib.load('trained_lr.joblib')
+rf = joblib.load('trained_rf.joblib')
+dt = joblib.load('trained_dt.joblib')
 
-  lr_predictions = lr.predict(X_test)
-  rf_predictions = rf.predict(X_test)
-  dt_predictions = dt.predict(X_test)
+lr_predictions = lr.predict(X_test)
+rf_predictions = rf.predict(X_test)
+dt_predictions = dt.predict(X_test)
+
+
+if page == pages[3] : 
+  st.header("Modelling 🛠️ ")
 
 # Display R² score on the train and test set
 
@@ -433,34 +432,36 @@ if page == pages[3] :
     feature_names = list(X_train.columns)
     plt.figure(figsize=(20,10))
     plot_tree(dt,filled=True, feature_names=feature_names)
-    st.pyplot(plt.gcf())  
-  
-  st.write("\n\n\n")
-
-  if st.checkbox("Comparison of the three models"):
+    st.pyplot(plt.gcf())   
     
-#Comparison bar plot of R² score of the 3 models.
 
-    lr_train_score = lr.score(X_train, y_train)
-    lr_test_score = lr.score(X_test, y_test)
+#Creation of Comparison page
 
-    rf_train_score = rf.score(X_train, y_train)
-    rf_test_score = rf.score(X_test, y_test)
+if page == pages[4] : 
+  st.header("Comparison of models ⚖️")
 
-    dt_train_score = dt.score(X_train, y_train)
-    dt_test_score = dt.score(X_test, y_test)
+  #Comparison bar plot of R² score of the 3 models.
 
-    model_names = ['Linear Regression Train', 'Linear Regression Test', 
+  lr_train_score = lr.score(X_train, y_train)
+  lr_test_score = lr.score(X_test, y_test)
+
+  rf_train_score = rf.score(X_train, y_train)
+  rf_test_score = rf.score(X_test, y_test)
+
+  dt_train_score = dt.score(X_train, y_train)
+  dt_test_score = dt.score(X_test, y_test)
+
+  model_names = ['Linear Regression Train', 'Linear Regression Test', 
                'Random Forest Train', 'Random Forest Test', 
                'Decision Tree Train', 'Decision Tree Test']
 
-    scores = [lr_train_score, lr_test_score, 
+  scores = [lr_train_score, lr_test_score, 
           rf_train_score, rf_test_score, 
           dt_train_score, dt_test_score]
 
-    df_comparison_models = pd.DataFrame({'Model': model_names, 'Score': scores})
+  df_comparison_models = pd.DataFrame({'Model': model_names, 'Score': scores})
 
-    fig = px.bar(df_comparison_models, x='Model', y='Score', color='Model', 
+  fig = px.bar(df_comparison_models, x='Model', y='Score', color='Model', 
              color_discrete_map={'Linear Regression Train': 'red', 
                                  'Linear Regression Test': 'red', 
                                  'Random Forest Train': 'blue', 
@@ -468,188 +469,195 @@ if page == pages[3] :
                                  'Decision Tree Train': 'green', 
                                  'Decision Tree Test': 'green'})
 
-    fig.update_layout(
+  fig.update_layout(
       title='Performance on Train and Test Sets of all three models',
       yaxis_title='R² Score',
       yaxis=dict(range=[0, 1]))
 
-    st.plotly_chart(fig)
+  st.plotly_chart(fig)
 
-    st.write ("Random Forest performed best on the test set, however it seems to be overfitted to the training set. Linear Regression also performed well in comparison to Decision Tree.")
+  st.write ("Random Forest performed best on the test set, however it seems to be overfitted to the training set. Linear Regression also performed well in comparison to Decision Tree.")
 
 
 #Comparison Boxplot of predictions of three models 
 
-    predictions_df = pd.DataFrame({
+  predictions_df = pd.DataFrame({
       'Linear Regression': lr_predictions.flatten(),
       'Random Forest': rf_predictions.flatten(),
       'Decision Tree': dt_predictions.flatten()})
 
-    fig = px.box(predictions_df.melt(var_name='Model', value_name='Predicted Value'), 
+  fig = px.box(predictions_df.melt(var_name='Model', value_name='Predicted Value'), 
              x='Model', y='Predicted Value', color='Model',
              color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'},
              labels={'Model': 'Model', 'Predicted Value': 'Predicted Value'},
              title='Distribution of predicted values for the three models')
 
-    fig.update_layout(height=600, width=800)
+  fig.update_layout(height=600, width=800)
 
-    st.plotly_chart(fig)
+  st.plotly_chart(fig)
 
 
 
 #Scatter plots of Predicted vs. Actual Values with Diagonal Line
 
-    fig, axs = plt.subplots(1, 3, figsize=(15, 5))
+  fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
-    axs[0].scatter(lr_predictions, y_test, c='red', s=30, marker='o')
-    axs[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
-    axs[0].set_title('Linear Regression')
-    axs[0].set_xlabel('Predicted Values')
-    axs[0].set_ylabel('Actual Values')
+  axs[0].scatter(lr_predictions, y_test, c='red', s=30, marker='o')
+  axs[0].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
+  axs[0].set_title('Linear Regression')
+  axs[0].set_xlabel('Predicted Values')
+  axs[0].set_ylabel('Actual Values')
 
-    axs[1].scatter(rf_predictions, y_test, c='blue', s=30, marker='o')
-    axs[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the  diagonal line
-    axs[1].set_title('Random Forest')
-    axs[1].set_xlabel('Predicted Values')
-    axs[1].set_ylabel('Actual Values')
+  axs[1].scatter(rf_predictions, y_test, c='blue', s=30, marker='o')
+  axs[1].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the  diagonal line
+  axs[1].set_title('Random Forest')
+  axs[1].set_xlabel('Predicted Values')
+  axs[1].set_ylabel('Actual Values')
 
-    axs[2].scatter(dt_predictions, y_test, c='green', s=30, marker='o')
-    axs[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
-    axs[2].set_title('Decision Tree')
-    axs[2].set_xlabel('Predicted Values')
-    axs[2].set_ylabel('Actual Values')
+  axs[2].scatter(dt_predictions, y_test, c='green', s=30, marker='o')
+  axs[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)  # Adding the diagonal line
+  axs[2].set_title('Decision Tree')
+  axs[2].set_xlabel('Predicted Values')
+  axs[2].set_ylabel('Actual Values')
 
-    plt.subplots_adjust(wspace=0.5)
-    fig.suptitle('Scatter plots of Predicted vs. Actual Values with Diagonal Line')
+  plt.subplots_adjust(wspace=0.5)
+  fig.suptitle('Scatter plots of Predicted vs. Actual Values with Diagonal Line')
 
-    st.pyplot(fig)
+  st.pyplot(fig)
 
 
-    from sklearn.metrics import mean_squared_error
-    from sklearn.metrics import mean_absolute_error
-    from math import sqrt
+  from sklearn.metrics import mean_squared_error
+  from sklearn.metrics import mean_absolute_error
+  from math import sqrt
 
-    lr_mse = mean_squared_error(y_test, lr_predictions)
-    lr_rmse = sqrt(lr_mse)
-    lr_mae = mean_absolute_error(y_test, lr_predictions)
+  lr_mse = mean_squared_error(y_test, lr_predictions)
+  lr_rmse = sqrt(lr_mse)
+  lr_mae = mean_absolute_error(y_test, lr_predictions)
 
-    rf_mse = mean_squared_error(y_test, rf_predictions)
-    rf_rmse = sqrt(rf_mse)
-    rf_mae = mean_absolute_error(y_test, rf_predictions)
+  rf_mse = mean_squared_error(y_test, rf_predictions)
+  rf_rmse = sqrt(rf_mse)
+  rf_mae = mean_absolute_error(y_test, rf_predictions)
 
-    dt_mse = mean_squared_error(y_test, dt_predictions)
-    dt_rmse = sqrt(dt_mse)
-    dt_mae = mean_absolute_error(y_test, dt_predictions)
+  dt_mse = mean_squared_error(y_test, dt_predictions)
+  dt_rmse = sqrt(dt_mse)
+  dt_mae = mean_absolute_error(y_test, dt_predictions)
 
-    st.write ("The 45-degree diagonal line allows us to assess the accuracy of our models' predictions. It's evident that the dots corresponding to the Random Forest model are the closest to this line, indicating a higher level of accuracy.")
+  st.write ("The 45-degree diagonal line allows us to assess the accuracy of our models' predictions. It's evident that the dots corresponding to the Random Forest model are the closest to this line, indicating a higher level of accuracy.")
 
 #Comparison graph of errors of the 3 models.
 
-    data = {
+  data = {
       'Model': ['Linear Regression', 'Random Forest', 'Decision Tree'],
       'MSE': [lr_mse, rf_mse, dt_mse],
       'RMSE': [lr_rmse, rf_rmse, dt_rmse],
       'MAE': [lr_mae, rf_mae, dt_mae]}
 
-    df_model_errors = pd.DataFrame(data)
+  df_model_errors = pd.DataFrame(data)
 
 # Plot Mean Squared Error
-    fig_mse = px.scatter(df_model_errors, x='Model', y='MSE', color='Model', title='Mean Squared Error for all three models',
+  fig_mse = px.scatter(df_model_errors, x='Model', y='MSE', color='Model', title='Mean Squared Error for all three models',
                      labels={'Model': 'Model', 'MSE': 'Mean Squared Error'},
                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
-    st.plotly_chart(fig_mse)
+  st.plotly_chart(fig_mse)
 
 # Plot Root Mean Squared Error
-    fig_rmse = px.scatter(df_model_errors, x='Model', y='RMSE', color='Model', title='Root Mean Squared Error for all three models',
+  fig_rmse = px.scatter(df_model_errors, x='Model', y='RMSE', color='Model', title='Root Mean Squared Error for all three models',
                       labels={'Model': 'Model', 'RMSE': 'Root Mean Squared Error'},
                       color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
-    st.plotly_chart(fig_rmse)
+  st.plotly_chart(fig_rmse)
 
 # Plot Mean Absolute Error
-    fig_mae = px.scatter(df_model_errors, x='Model', y='MAE', color='Model', title='Mean Absolute Error for all three models',
+  fig_mae = px.scatter(df_model_errors, x='Model', y='MAE', color='Model', title='Mean Absolute Error for all three models',
                      labels={'Model': 'Model', 'MAE': 'Mean Absolute Error'},
                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
-    st.plotly_chart(fig_mae)
+  st.plotly_chart(fig_mae)
 
-    st.write("The accuracy of our predictions correlates with lower error values. Random Forest and Linear Regression have lower errors than Decision Tree, therefore we can say those two are more accurate.")
+  st.write("The accuracy of our predictions correlates with lower error values. Random Forest and Linear Regression have lower errors than Decision Tree, therefore we can say those two are more accurate.")
     
-    st.write("\n\n\n")
-    st.write ("**Hyperparameter tuning**")
-    st.write("The results of hyperparameter tuning didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+  st.write("\n\n\n")
+  st.subheader ("Hyperparameter tuning")
+  st.write("The results of hyperparameter tuning didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
 
-    #Creating graphs to show errors after hyperparameter tuning
-    models = ['Linear Regression', 'Random Forest','Decision Tree']
-    lr_mse = 0.16
-    rf_mse = 0.14
-    dt_mse = 0.33
-    lr_mae = 0.29
-    rf_mae = 0.28
-    dt_mae = 0.45
-    lr_rmse = 0.39
-    rf_rmse = 0.37
-    dt_rmse = 0.57
-    mae_best_lr = 0.30
-    mae_best_rf = 0.34
-    mae_best_dt = 0.57
-    mse_best_lr = 0.16
-    mse_best_rf = 0.2
-    mse_best_dt = 0.5
-    rmse_best_lr = 0.4
-    rmse_best_rf = 0.4
-    rmse_best_dt = 0.4
+#Creating graphs to show errors after hyperparameter tuning
+  models = ['Linear Regression', 'Random Forest','Decision Tree']
+  lr_mse = 0.16
+  rf_mse = 0.14
+  dt_mse = 0.33
+  lr_mae = 0.29
+  rf_mae = 0.28
+  dt_mae = 0.45
+  lr_rmse = 0.39
+  rf_rmse = 0.37
+  dt_rmse = 0.57
+  mae_best_lr = 0.30
+  mae_best_rf = 0.34
+  mae_best_dt = 0.57
+  mse_best_lr = 0.16
+  mse_best_rf = 0.2
+  mse_best_dt = 0.5
+  rmse_best_lr = 0.4
+  rmse_best_rf = 0.4
+  rmse_best_dt = 0.4
 
-    mse_before = [lr_mse, rf_mse, dt_mse]
-    rmse_before = [lr_rmse, rf_rmse, dt_rmse]
-    mae_before = [lr_mae, rf_mae, dt_mae]
+  mse_before = [lr_mse, rf_mse, dt_mse]
+  rmse_before = [lr_rmse, rf_rmse, dt_rmse]
+  mae_before = [lr_mae, rf_mae, dt_mae]
 
-    mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
-    mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
-    rmse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
+  mae_after = [mae_best_lr, mae_best_rf, mae_best_dt]
+  mse_after = [mse_best_lr, mse_best_rf, mse_best_dt]
+  rmse_after = [rmse_best_lr, rmse_best_rf, rmse_best_dt]
 
-    fig_mae = go.Figure()
-    fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
-    fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
-    fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
+  fig_mae = go.Figure()
+  fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
+  fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
+  fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
 
-    fig_mse = go.Figure()
-    fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
-    fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
-    fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
+  fig_mse = go.Figure()
+  fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
+  fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
+  fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
 
-    fig_rmse = go.Figure()
-    fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
-    fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
-    fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
+  fig_rmse = go.Figure()
+  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
+  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
+  fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
 
-    st.plotly_chart(fig_mae, use_container_width=True)
-    st.plotly_chart(fig_mse, use_container_width=True)
-    st.plotly_chart(fig_rmse, use_container_width=True)
+  st.plotly_chart(fig_mae, use_container_width=True)
+  st.plotly_chart(fig_mse, use_container_width=True)
+  st.plotly_chart(fig_rmse, use_container_width=True)
+
 
 #Creation of Interpretation page
 
-if page == pages[4] : 
-  st.header("Interpretation of results🔍")
+if page == pages[5] : 
+  st.header("Interpretation of results 🔍")
 
   st.write("In summary, we explored three distinct supervised learning models for our dataset: **Linear Regression, Random Forest Regression, and Decision Tree Regression**. Upon assessing their performance, we opted to exclude the Decision Tree Regressor model due to its underwhelming R² score and error metrics")
 
-  st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors. However, we observed signs of overfitting in the Random Forest model.")
+  st.write("Both **Linear Regression and Random Forest** show good R² scores and minimal errors.")
 
   st.write("By reducing the **number of features** to 15, we managed to mitigate the complexity of the Random Forest model while maintaining comparable performance levels. Consequently, Random Forest emerges as the most suitable model for our objectives.")
+  
+  st.write("\n\n\n")
+  st.image('images/Random-forest-prediction-scheme.png')
+  st.write("[Picture Copyright](https://www.researchgate.net/figure/Random-forest-prediction-scheme_fig2_357828695)")
+
 
 #Creation of Difficulties page
 
-if page == pages[5] : 
-  st.header("Difficulties during the project⚙️")
+if page == pages[6] : 
+  st.header("Difficulties during the project ⚙️")
  
-  st.write("While working on the project, we encountered several difficulties. One of them was the absence of regional data for certain countries, prompting us to seek data from alternative sources")
-  st.write("In addition, concerning the dataset, we lacked access to data for all countries for the entire time period (since 2005). Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
-  st.write("Due to the absence of data for certain countries, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
-  st.write("We encountered issues during the encoding of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
+  st.write("While working on the project, we encountered several difficulties. One of them was the **absence of regional data** for certain countries, prompting us to seek data from alternative sources")
+  st.write("In addition, concerning the dataset, we **lacked access to data for all countries for the entire time period (since 2005)**. Consequently, you will find data visualizations specifically for 2021, which is the most recent and data-enriched year.")
+  st.write("Due to the **absence of data for certain countries**, we had to remove several rows containing numerous NaN values. Locating current data for these countries proved challenging, and these rows, with a significant number of missing values, may not offer reliable or meaningful information for our analysis, potentially leading to erroneous conclusions.")
+  st.write("We encountered **issues during the encoding** of our dataframe. When creating a new dataframe with encoded categorical features, we discovered new indices starting from 0. This created problems when concatenating the original dataframe with numerical features due to inconsistent indices. The solution involved resetting the indices to ensure consistency during concatenation using the reset_index function.")
 #Creation of Outlook page
 
-if page == pages[6] : 
-  st.header("Outlook and continuation of the project📝")
+if page == pages[7] : 
+  st.header("Outlook and continuation of the project 📝")
 
+  st.subheader ("Prediction of other variables")
   st.write("The dataset could be utilized to predict other variables such as:")
   st.write("- **Logged GDP per capita**")
   st.write("- **Social support**")
@@ -660,17 +668,25 @@ if page == pages[6] :
   st.write("- **Positive affect Negative affect**")
   st.write("- **Negative affect**") 
   st.write("Each of these variables could be considered as the target variable in separate regression analyses.")
+  st.write("\n\n\n")
+
+  st.subheader ("Temporal analysis")
   st.write("It is feasible to go into a temporal analysis. We could observe trends and changes over time and provide valuable insights into the evolution of happiness scores and related indicators. Before doing it, we need to research and enrich the data for the given period of time.")
   st.image('images/graph.png')
+  st.write("\n\n\n")
+
+  st.subheader ("Feature engineering techniques")
   st.write("In continuation we can experiment with more diverse feature engineering techniques and exploring different feature selection methods  improve model performance and interpretability.")
-  
+  st.write("\n\n\n")
+
+  st.subheader ("External data")
   st.write("It is also possible to incorporate external data such as environmental factors, more socio-economic indicators, lifestyle indicators such as work-life balance to see how they interact with existing variables in our analysis. It can provide more complex insights about the exploration of well-being.")
   st.image('images/4.jpeg', width = 150)
 
 #Creation of Team page
 
-if page == pages[7] : 
-  st.header("Team🚀")
+if page == pages[8] : 
+  st.header("Team 🚀")
 
   st.write("This project was led by three data analysts:")
 
