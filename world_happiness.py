@@ -254,6 +254,7 @@ if page == pages[1] :
   sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax)
   ax.set_xlabel('Regional Indicator')
   ax.set_ylabel('Ladder Score')
+  ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
   ax.get_legend().remove()
   st.pyplot(fig)
 
