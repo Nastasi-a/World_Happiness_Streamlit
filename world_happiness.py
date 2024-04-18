@@ -238,12 +238,13 @@ if page == pages[1] :
   
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
   
-  fig = px.line(df, x='year', y='Ladder score', color='Regional indicator', markers=True)
-
+  fig = px.line(df, x='year', y='Ladder score', color='Regional indicator', error_y=None, markers=True)
   fig.update_layout(
   title="Ladder Score by Year and Regional Indicator",
   xaxis_title="Year",
-  yaxis_title="Ladder Score")
+  yaxis_title="Ladder Score",
+  legend=dict(title='Regional Indicator', orientation='v', yanchor="top", y=0.5, xanchor="right", x=1),
+  margin=dict(l=0, r=50, t=50, b=0))
   st.plotly_chart(fig)
 
   st.write("Various regions began recording happiness scores at different times. Sub-Saharan, Commonwealth of Independent States, and South Asian countries started in 2006. North America leads in happiness scores, followed closely by Latin America and the Caribbean. In contrast, Sub-Saharan and South Asian countries have the lowest rankings, with Sub-Saharan nations leading in this aspect.")
