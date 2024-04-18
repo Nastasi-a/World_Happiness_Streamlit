@@ -251,9 +251,10 @@ if page == pages[1] :
   st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig, ax = plt.subplots(figsize=(12, 6))
-  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax, legend=False)
+  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax)
   ax.set_xlabel('Regional Indicator')
   ax.set_ylabel('Ladder Score')
+  ax.get_legend().remove()
   st.pyplot(fig)
 
   st.write("The graph above displays the happiness ladder score based on the regional indicator. The results are consistent with previous findings, showing minimal deviation. However, some outliers are noticeable in the graph due to variations in the starting year of recording the ladder score across different regions in our dataset.")
