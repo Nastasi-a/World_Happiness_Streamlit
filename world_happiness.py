@@ -237,8 +237,7 @@ if page == pages[1] :
   st.write("\n\n\n\n\n")
   
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
-  avg_scores = df.groupby('Regional indicator').mean().reset_index()
-  fig = px.line(avg_scores, x='year', y='Ladder score', color='Regional indicator', markers=True)
+  fig = px.line(merged_df, x='year', y='Ladder score', color='Regional indicator', markers=True)
   fig.update_layout(
   title="Development of Ladder Score Over the Years for Each Regional Indicator",
   xaxis_title="Year",
