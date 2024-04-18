@@ -258,7 +258,7 @@ if page == pages[1] :
   ax.get_legend().remove()
   st.pyplot(fig)
 
-  st.write("The graph above displays the happiness ladder score based on the regional indicator. The results are consistent with previous findings, showing minimal deviation. However, some outliers are noticeable in the graph due to variations in the starting year of recording the ladder score across different regions in our dataset.")
+  st.write("The graph above displays the happiness ladder score based on the regional indicator. The results are consistent with previous findings, showing minimal deviation. However, some extreme values are noticeable in the graph due to variations in the starting year of recording the ladder score across different regions in our dataset.")
 
 
 #Creation of Modelling page
