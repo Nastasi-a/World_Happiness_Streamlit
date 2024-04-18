@@ -238,9 +238,9 @@ if page == pages[1] :
   
   st.write("**Development of the Ladder Score over years for each Regional Indicator**")
   
-  fig = px.line(df, x='year', y='Ladder score', color='Regional indicator', error_y=None, markers=True)
+  fig = px.line(df, x='year', y='Ladder score', color='Regional indicator', line_group='Regional indicator', markers=True)
   fig.update_layout(
-  title="Ladder Score for Years by Regional Indicator",
+  title="Ladder Score Over Years for Each Regional Indicator",
   xaxis_title="Year",
   yaxis_title="Ladder Score",
   legend=dict(title='Regional Indicator', orientation='v', yanchor="top", y=0.5, xanchor="right", x=1),
