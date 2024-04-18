@@ -251,7 +251,7 @@ if page == pages[1] :
   st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig, ax = plt.subplots(figsize=(12, 6))
-  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax)
+  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax, legend=False)
   ax.set_xlabel('Regional Indicator')
   ax.set_ylabel('Ladder Score')
   st.pyplot(fig)
