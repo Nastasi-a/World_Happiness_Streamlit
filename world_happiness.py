@@ -78,7 +78,7 @@ if page == pages[1] :
   st.subheader('Statistics')
   st.dataframe(df.describe())
 
-  st.write("We need to write something here about the statistics!")
+  st.write("This table presents statistical summaries for variables of our dataframe the years 2005 to 2021. Here we provide an overview of the distribution and central tendencies of the variables related to happiness scores across different countries and years.")
   st.write("\n\n\n\n\n")
 
 #Bar plot to show the distribution of the Ladder score in 2021.
@@ -195,6 +195,7 @@ if page == pages[1] :
             )
   fig.update_layout(yaxis=dict(autorange="reversed")) # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
+  st.write("The graph illustrates the top 10 countries with the highest positive affect scores in 2021, showcasing their relative levels of happiness and well-being.")
 
   st.write("\n\n\n\n\n")
 
@@ -215,7 +216,7 @@ if page == pages[1] :
 
   fig.update_layout(yaxis=dict(autorange="reversed"))  # Reverse the order of countries on the y-axis
   st.plotly_chart(fig)
-
+  st.write("The graph illustrates the top 10 countries with the highest negative affect scores in 2021, providing insights into the levels of distress or dissatisfaction experienced by their populations.")
   st.write("\n\n\n\n\n")
   st.write("**The pairplot which shows the correlation between Positive and Negative affect**")
   correlation_2021 = df_filtered_first[['Positive affect', 'Negative affect']]
@@ -230,7 +231,7 @@ if page == pages[1] :
   fig = px.box (df_2021, x = 'Ladder score') 
   st.plotly_chart(fig)
 
-  st.write("We need to write something here about the boxplot!")
+  st.write("The graph displays the distribution of ladder scores in 2021, revealing an extreme value for one country's happiness level compared to others.")
 
 
   st.write("\n\n\n\n\n")
@@ -250,11 +251,11 @@ if page == pages[1] :
   st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig, ax = plt.subplots(figsize=(12, 6))
-  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=2, order=regional_indicators, ax=ax)
+  sns.boxplot(x='Regional indicator', y='Ladder score', data=df, hue='Regional indicator', width=0.8, order=regional_indicators, ax=ax)
   ax.set_xlabel('Regional Indicator')
   ax.set_ylabel('Ladder Score')
   ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-  ax.legend().remove()
+  ax.legend(loc='upper right', bbox_to_anchor=(1.25, 1), title='Regional Indicator')
   st.pyplot(fig)
 
   st.write("The graph above displays the happiness ladder score based on the regional indicator. The results are consistent with previous findings, showing minimal deviation. However, some outliers are noticeable in the graph due to variations in the starting year of recording the ladder score across different regions in our dataset.")
@@ -589,7 +590,7 @@ if page == pages[3] :
     
   st.write("\n\n\n")
   st.subheader ("Hyperparameter tuning")
-  st.write("The results of hyperparameter tuning didn’t significantly affect performance or even reduced it slightly. Therefore, we have decided to proceed with the original models.")
+  st.write("We have carried out **hyperparameter tuning**. The grid we used didn’t give us expected result. Therefore, we have decided to proceed with the original models.")
 
 #Creating graphs to show errors after hyperparameter tuning
   models = ['Linear Regression', 'Random Forest','Decision Tree']
