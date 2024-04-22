@@ -248,7 +248,6 @@ if page == pages[1] :
   st.write("Various regions began recording happiness scores at different times. Sub-Saharan, Commonwealth of Independent States, and South Asian countries started in 2006. North America leads in happiness scores, followed closely by Latin America and the Caribbean. In contrast, Sub-Saharan and South Asian countries have the lowest rankings, with Sub-Saharan nations leading in this aspect.")
 
   st.write("\n\n\n\n\n")
-  st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig = px.box(df, x='Regional indicator', y='Ladder score', color='Regional indicator',
   category_orders={'Regional indicator': regional_indicators})
@@ -346,13 +345,15 @@ if page == pages[2] :
     X_test = pd.DataFrame(X_test)
 
     rf_feature_importance_df = pd.DataFrame({
-      'Feature': X_train.columns,
-      'Importance': rf.feature_importances_})
+        'Feature': X_train.columns,
+        'Importance': rf.feature_importances_})
 
     rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
 
     fig = px.bar(rf_feature_importance_df, x='Feature', y='Importance', labels={'Importance': 'Importance', 'Feature': 'Feature'}, title='Random Forest Feature Importances')
     st.plotly_chart(fig)
+
+    st.write("\n\n\n")
 
     importance_threshold = 0.0019
 
@@ -374,6 +375,10 @@ if page == pages[2] :
     st.write(X_train.shape)
     st.write(X_train_selected.shape)
     st.write("After the feature selection process only 15 features are left instead of 177.")
+    
+    st.write("**The most important features are:**")
+    most_important_features = rf_feature_importance_df['Feature'][:15].tolist()
+    st.write(most_important_features)
 
     rf_train_score = rf.score(X_train, y_train)
     rf_test_score = rf.score(X_test, y_test)
@@ -540,6 +545,8 @@ if page == pages[3] :
 
   st.pyplot(fig)
 
+  st.write ("In the scatter plots, the Linear Regression and Random Forest models exhibit a similar shape, with the Random Forest plot showing predictions closer to the 45-degree line, indicating higher accuracy. The Decision Tree plot, however, appears different due to its algorithm, which operates using a sequence of if-else conditions. While the diagonal line represents perfect predictions, the Decision Tree's predictions deviate significantly, indicating lower accuracy compared to the other models.")
+
 
   from sklearn.metrics import mean_squared_error
   from sklearn.metrics import mean_absolute_error
@@ -556,8 +563,6 @@ if page == pages[3] :
   dt_mse = mean_squared_error(y_test, dt_predictions)
   dt_rmse = sqrt(dt_mse)
   dt_mae = mean_absolute_error(y_test, dt_predictions)
-
-  st.write ("The 45-degree diagonal line allows us to assess the accuracy of our models' predictions. It's evident that the dots corresponding to the Random Forest model are the closest to this line, indicating a higher level of accuracy.")
 
 #Comparison graph of errors of the 3 models.
 
