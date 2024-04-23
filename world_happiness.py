@@ -340,18 +340,20 @@ if page == pages[2] :
     st.write("The Random Forest model seems to be overfitted. It performs really well on the training set but poorly on the unseen data.")
    
     st.write("\n\n\n")
-   
+    
     X_train = pd.DataFrame(X_train)
     X_test = pd.DataFrame(X_test)
 
     rf_feature_importance_df = pd.DataFrame({
-        'Feature': X_train.columns,
-        'Importance': rf.feature_importances_})
+            'Feature': X_train.columns,
+            'Importance': rf.feature_importances_})
 
     rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
 
     fig = px.bar(rf_feature_importance_df, x='Feature', y='Importance', labels={'Importance': 'Importance', 'Feature': 'Feature'}, title='Random Forest Feature Importances')
+
     st.plotly_chart(fig)
+
 
     st.write("\n\n\n")
 
