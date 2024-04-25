@@ -378,10 +378,30 @@ if page == pages[2] :
     st.write(X_train_selected.shape)
     st.write("After the feature selection process only 15 features are left instead of 177.")
     
-    st.write("**The most important features are:**")
-    most_important_features = rf_feature_importance_df['Feature'][:15].tolist()
-    st.write(most_important_features)
+    st.write("\n\n\n")
+    feature_names = X_train.columns
+    feature_importance = rf.feature_importances_
 
+    # Pair feature importance values with their corresponding feature names
+    feature_importance_with_names = list(zip(feature_names, feature_importance))
+
+    # Sort the features by importance (optional)
+    feature_importance_with_names.sort(key=lambda x: x[1], reverse=True)
+
+    # Print feature importance
+    st.write("**15 Features with highest Importance:**")
+    for feature, importance in feature_importance_with_names[:15]:
+        st.write(f"{feature}: {importance}")
+
+    
+    st.write("\n\n\n")
+    st.write("**The 3 most important variables in the model are:**")
+    column_names = df.columns[[2, 4, 8]].tolist()
+    for name in column_names:
+        st.write("-", name)
+
+
+    #Comparing scores of rf with and without feature reduction
     rf_train_score = rf.score(X_train, y_train)
     rf_test_score = rf.score(X_test, y_test)
 
