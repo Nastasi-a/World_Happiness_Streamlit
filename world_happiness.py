@@ -392,19 +392,25 @@ if page == pages[2] :
     # Sort the features by importance (optional)
     feature_importance_with_names.sort(key=lambda x: x[1], reverse=True)
 
-    # Print feature importance
-    st.write("**15 Features with highest Importance:**")
-    for feature, importance in feature_importance_with_names[:15]:
-        st.write(f"{feature}: {importance}")
+    #Getting the encoded feature names
+     
+    st.dataframe(X_train_encoded_df)
+    
+    df_encoded = pd.concat([df.drop([cat], axis=1), X_train_encoded_df], axis=1)
+    st.dataframe(df_encoded)
 
-    
+
+    # Print feature importance and variable name
+    st.write("**15 Features with highest Importance:**")
+    column_names = df_encoded.columns[[2, 4, 8, 3, 12, 5, 7, 9, 6, 1, 85, 150, 38, 15, 58]].tolist()
+    for feature, importance in feature_importance_with_names[:15]:
+        # Choose the corresponding column name based on the index of the current feature
+        name = column_names[feature]
+        st.write(f"Feature: {feature}, {name}, Importance: {importance}")
+
+
     st.write("\n\n\n")
-    st.write("**The 3 most important variables in the model are:**")
-    column_names = df.columns[[2, 4, 8]].tolist()
-    for name in column_names:
-        st.write("-", name)
-    
-    st.write("\n\n\n")
+
 
   
     #Comparing scores of rf with and without feature reduction
