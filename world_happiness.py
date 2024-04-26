@@ -341,21 +341,27 @@ if page == pages[2] :
    
     st.write("\n\n\n")
     
+    st.subheader('Random Forest Feature Importances')
+    st.write("\n\n\n")
+
     X_train = pd.DataFrame(X_train)
     X_test = pd.DataFrame(X_test)
 
     rf_feature_importance_df = pd.DataFrame({
             'Feature': X_train.columns,
             'Importance': rf.feature_importances_})
-
+    
+    rf_feature_importance_df['Feature'] = rf_feature_importance_df['Feature'].astype('str')
     rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
 
-    fig = px.bar(rf_feature_importance_df, x='Feature', y='Importance', labels={'Importance': 'Importance', 'Feature': 'Feature'}, title='Random Forest Feature Importances')
+    plt.figure(figsize=(10, 6))
+    plt.bar(rf_feature_importance_df['Feature'], rf_feature_importance_df['Importance'])
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.xticks([]) 
+    st.pyplot(plt.gcf())
 
-    st.plotly_chart(fig)
-
-
-    st.write("\n\n\n")
+    rf_feature_importance_df['Feature'] = rf_feature_importance_df['Feature'].astype('int')
 
     importance_threshold = 0.0019
 
@@ -368,17 +374,15 @@ if page == pages[2] :
 
     rf_selected_predictions = rf_selected.predict(X_test_selected)
 
-    st.write('R² Score on the train set with Random Forest with reduced features:', rf_selected.score(X_train_selected, y_train))
-    st.write('R² Score on the test set with Random Forest with reduced features:', rf_selected.score(X_test_selected, y_test))
-
     st.write("\n\n\n")
-    
+
     st.write('**Shape before and after feature reduction:**')
     st.write(X_train.shape)
     st.write(X_train_selected.shape)
     st.write("After the feature selection process only 15 features are left instead of 177.")
     
     st.write("\n\n\n")
+
     feature_names = X_train.columns
     feature_importance = rf.feature_importances_
 
@@ -400,7 +404,10 @@ if page == pages[2] :
     for name in column_names:
         st.write("-", name)
 
+    
+    st.write("\n\n\n")
 
+  
     #Comparing scores of rf with and without feature reduction
     rf_train_score = rf.score(X_train, y_train)
     rf_test_score = rf.score(X_test, y_test)
@@ -420,6 +427,12 @@ if page == pages[2] :
 
     st.plotly_chart(fig)
 
+    st.write("\n\n\n")
+
+    st.write('R² Score on the train set with Random Forest with reduced features:', rf_selected.score(X_train_selected, y_train))
+    st.write('R² Score on the test set with Random Forest with reduced features:', rf_selected.score(X_test_selected, y_test))
+    
+    st.write("\n\n\n")
 
     st.write("Reducing the features of Random Forest leads to almost the same results in the R² score. And it lowers the complexity of the model immensly.")
 
@@ -449,19 +462,18 @@ if page == pages[2] :
     rf_feature_importance_df_selected = pd.DataFrame({
         'Feature': X_train_selected.columns,
         'Importance': rf_selected.feature_importances_})
-
+    
+    rf_feature_importance_df_selected['Feature'] = rf_feature_importance_df_selected['Feature'].astype('str')
     rf_feature_importance_df_selected = rf_feature_importance_df_selected.sort_values(by='Importance', ascending=False)
 
-    fig = go.Figure(go.Bar(x=rf_feature_importance_df_selected['Feature'],
-                          y=rf_feature_importance_df_selected['Importance'],
-                          marker_color='blue'))
-    fig.update_layout(title='Random Forest Feature Importances after Feature Reduction',
-                      xaxis_title='Feature',
-                      yaxis_title='Importance',
-                      template='plotly_white')
-    st.plotly_chart(fig)
+    plt.figure(figsize=(10, 6))
+    plt.bar(rf_feature_importance_df_selected['Feature'], rf_feature_importance_df_selected['Importance'])
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.xticks([]) 
+    st.pyplot(plt.gcf())
 
-    st.write("The feature importance graph after feature reduction looks very similar to the original one. That means that the feature reduction has effectively selected the most important features from the dataset. The model seems to be performing well after feature reduction therefore we will go with the new model with only 15 features.")
+    st.write("The feature importance graph after feature reduction looks very similar to the original one, but it only has 15 features. That means that the feature reduction has effectively selected the most important features from the dataset. The model seems to be performing well after feature reduction therefore we will go with the new model with only 15 features.")
 
   else: 
     st.write("\n\n\n")
