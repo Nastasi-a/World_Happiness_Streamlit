@@ -403,7 +403,6 @@ if page == pages[2] :
     column_names = df.columns[[2, 4, 8]].tolist()
     for name in column_names:
         st.write("-", name)
-
     
     st.write("\n\n\n")
 
