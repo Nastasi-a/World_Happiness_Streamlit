@@ -393,12 +393,10 @@ if page == pages[2] :
     feature_importance_with_names.sort(key=lambda x: x[1], reverse=True)
 
     #Getting the encoded feature names
-     
-    st.dataframe(X_train_encoded_df)
-    
-    df_encoded = pd.concat([df.drop([cat], axis=1), X_train_encoded_df], axis=1)
-    st.dataframe(df_encoded)
 
+    df_no_cat = df.drop(columns=cat)
+    df_encoded = pd.concat([df_no_cat, X_train_encoded_df], axis=1)
+    st.dataframe(df_encoded)
 
     # Print feature importance and variable name
     st.write("**15 Features with highest Importance:**")
