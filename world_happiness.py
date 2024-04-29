@@ -248,7 +248,6 @@ if page == pages[1] :
   st.write("Various regions began recording happiness scores at different times. Sub-Saharan, Commonwealth of Independent States, and South Asian countries started in 2006. North America leads in happiness scores, followed closely by Latin America and the Caribbean. In contrast, Sub-Saharan and South Asian countries have the lowest rankings, with Sub-Saharan nations leading in this aspect.")
 
   st.write("\n\n\n\n\n")
-  st.write("**Distribution of the Ladder Score by Regional Indicator**")
   regional_indicators = df['Regional indicator'].unique()
   fig = px.box(df, x='Regional indicator', y='Ladder score', color='Regional indicator',
   category_orders={'Regional indicator': regional_indicators})
@@ -341,18 +340,28 @@ if page == pages[2] :
     st.write("The Random Forest model seems to be overfitted. It performs really well on the training set but poorly on the unseen data.")
    
     st.write("\n\n\n")
-   
+    
+    st.subheader('Random Forest Feature Importances')
+    st.write("\n\n\n")
+
     X_train = pd.DataFrame(X_train)
     X_test = pd.DataFrame(X_test)
 
     rf_feature_importance_df = pd.DataFrame({
-      'Feature': X_train.columns,
-      'Importance': rf.feature_importances_})
-
+            'Feature': X_train.columns,
+            'Importance': rf.feature_importances_})
+    
+    rf_feature_importance_df['Feature'] = rf_feature_importance_df['Feature'].astype('str')
     rf_feature_importance_df = rf_feature_importance_df.sort_values(by='Importance', ascending=False)
 
-    fig = px.bar(rf_feature_importance_df, x='Feature', y='Importance', labels={'Importance': 'Importance', 'Feature': 'Feature'}, title='Random Forest Feature Importances')
-    st.plotly_chart(fig)
+    plt.figure(figsize=(10, 6))
+    plt.bar(rf_feature_importance_df['Feature'], rf_feature_importance_df['Importance'])
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.xticks([]) 
+    st.pyplot(plt.gcf())
+
+    rf_feature_importance_df['Feature'] = rf_feature_importance_df['Feature'].astype('int')
 
     importance_threshold = 0.0019
 
@@ -365,16 +374,43 @@ if page == pages[2] :
 
     rf_selected_predictions = rf_selected.predict(X_test_selected)
 
-    st.write('R² Score on the train set with Random Forest with reduced features:', rf_selected.score(X_train_selected, y_train))
-    st.write('R² Score on the test set with Random Forest with reduced features:', rf_selected.score(X_test_selected, y_test))
-
     st.write("\n\n\n")
-    
+
     st.write('**Shape before and after feature reduction:**')
     st.write(X_train.shape)
     st.write(X_train_selected.shape)
     st.write("After the feature selection process only 15 features are left instead of 177.")
+    
+    st.write("\n\n\n")
 
+    feature_names = X_train.columns
+    feature_importance = rf.feature_importances_
+
+    # Pair feature importance values with their corresponding feature names
+    feature_importance_with_names = list(zip(feature_names, feature_importance))
+
+    # Sort the features by importance (optional)
+    feature_importance_with_names.sort(key=lambda x: x[1], reverse=True)
+
+    #Getting the encoded feature names
+    df_no_cat = df.drop(['Ladder score', 'Regional indicator', 'Country name'], axis=1)
+    df_encoded = pd.concat([df_no_cat, X_train_encoded_df], axis=1)
+
+    # Print feature importance and variable name
+    st.write("**15 Features with highest Importance:**")
+    column_names = df_encoded.columns[[1, 3, 7, 2, 11, 4, 6, 8, 5, 0, 84, 149, 37, 14, 57]].tolist()
+    min_length = min(len(feature_importance_with_names), len(column_names))
+    for i in range(min_length):
+        feature, importance = feature_importance_with_names[i]
+        name = column_names[i]
+        st.write(f"Feature: {feature}, {name}, Importance: {importance}")
+
+
+    st.write("\n\n\n")
+
+
+  
+    #Comparing scores of rf with and without feature reduction
     rf_train_score = rf.score(X_train, y_train)
     rf_test_score = rf.score(X_test, y_test)
 
@@ -393,6 +429,12 @@ if page == pages[2] :
 
     st.plotly_chart(fig)
 
+    st.write("\n\n\n")
+
+    st.write('R² Score on the train set with Random Forest with reduced features:', rf_selected.score(X_train_selected, y_train))
+    st.write('R² Score on the test set with Random Forest with reduced features:', rf_selected.score(X_test_selected, y_test))
+    
+    st.write("\n\n\n")
 
     st.write("Reducing the features of Random Forest leads to almost the same results in the R² score. And it lowers the complexity of the model immensly.")
 
@@ -422,19 +464,18 @@ if page == pages[2] :
     rf_feature_importance_df_selected = pd.DataFrame({
         'Feature': X_train_selected.columns,
         'Importance': rf_selected.feature_importances_})
-
+    
+    rf_feature_importance_df_selected['Feature'] = rf_feature_importance_df_selected['Feature'].astype('str')
     rf_feature_importance_df_selected = rf_feature_importance_df_selected.sort_values(by='Importance', ascending=False)
 
-    fig = go.Figure(go.Bar(x=rf_feature_importance_df_selected['Feature'],
-                          y=rf_feature_importance_df_selected['Importance'],
-                          marker_color='blue'))
-    fig.update_layout(title='Random Forest Feature Importances after Feature Reduction',
-                      xaxis_title='Feature',
-                      yaxis_title='Importance',
-                      template='plotly_white')
-    st.plotly_chart(fig)
+    plt.figure(figsize=(10, 6))
+    plt.bar(rf_feature_importance_df_selected['Feature'], rf_feature_importance_df_selected['Importance'])
+    plt.xlabel('Feature')
+    plt.ylabel('Importance')
+    plt.xticks([]) 
+    st.pyplot(plt.gcf())
 
-    st.write("The feature importance graph after feature reduction looks very similar to the original one. That means that the feature reduction has effectively selected the most important features from the dataset. The model seems to be performing well after feature reduction therefore we will go with the new model with only 15 features.")
+    st.write("The feature importance graph after feature reduction looks very similar to the original one, but it only has 15 features. That means that the feature reduction has effectively selected the most important features from the dataset. The model seems to be performing well after feature reduction therefore we will go with the new model with only 15 features.")
 
   else: 
     st.write("\n\n\n")
@@ -540,6 +581,8 @@ if page == pages[3] :
 
   st.pyplot(fig)
 
+  st.write ("In the scatter plots, the Linear Regression and Random Forest models exhibit a similar shape, with the Random Forest plot showing predictions closer to the 45-degree line, indicating higher accuracy. The Decision Tree plot, however, appears different due to its algorithm, which operates using a sequence of if-else conditions. While the diagonal line represents perfect predictions, the Decision Tree's predictions deviate significantly, indicating lower accuracy compared to the other models.")
+
 
   from sklearn.metrics import mean_squared_error
   from sklearn.metrics import mean_absolute_error
@@ -556,8 +599,6 @@ if page == pages[3] :
   dt_mse = mean_squared_error(y_test, dt_predictions)
   dt_rmse = sqrt(dt_mse)
   dt_mae = mean_absolute_error(y_test, dt_predictions)
-
-  st.write ("The 45-degree diagonal line allows us to assess the accuracy of our models' predictions. It's evident that the dots corresponding to the Random Forest model are the closest to this line, indicating a higher level of accuracy.")
 
 #Comparison graph of errors of the 3 models.
 
