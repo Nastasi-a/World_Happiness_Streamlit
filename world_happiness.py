@@ -75,12 +75,6 @@ if page == pages[0] :
 if page == pages[1] : 
   st.header("Data Visualization 🎨")
 
-  st.subheader('Statistics')
-  st.dataframe(df.describe())
-
-  st.write("This table presents statistical summaries for variables of our dataframe the years 2005 to 2021. Here we provide an overview of the distribution and central tendencies of the variables related to happiness scores across different countries and years.")
-  st.write("\n\n\n\n\n")
-
 #Bar plot to show the distribution of the Ladder score in 2021.
 
   df_2021 = df[df['year'] == 2021]
