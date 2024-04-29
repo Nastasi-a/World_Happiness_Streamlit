@@ -537,7 +537,7 @@ if page == pages[3] :
 
 #Scatter plots of Predicted vs. Actual Values with Diagonal Line
   
-  st.write ('**Predicted vs. Actual Values**')
+  st.write ('**Scatter plots of Predicted vs. Actual Values with Diagonal Line**')
 
   fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
@@ -560,8 +560,6 @@ if page == pages[3] :
   axs[2].set_ylabel('Actual Values')
 
   plt.subplots_adjust(wspace=0.5)
-  fig.suptitle('Scatter plots of Predicted vs. Actual Values with Diagonal Line')
-
   st.pyplot(fig)
 
   st.write ("In the scatter plots, the Linear Regression and Random Forest models exhibit a similar shape, with the Random Forest plot showing predictions closer to the 45-degree line, indicating higher accuracy. The Decision Tree plot, however, appears different due to its algorithm, which operates using a sequence of if-else conditions. While the diagonal line represents perfect predictions, the Decision Tree's predictions deviate significantly, indicating lower accuracy compared to the other models.")
