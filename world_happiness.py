@@ -533,28 +533,11 @@ if page == pages[3] :
   st.plotly_chart(fig)
 
   st.write ("Random Forest performed best on the test set, however it seems to be overfitted to the training set. Linear Regression also performed well in comparison to Decision Tree.")
-
-
-#Comparison Boxplot of predictions of three models 
-
-  predictions_df = pd.DataFrame({
-      'Linear Regression': lr_predictions.flatten(),
-      'Random Forest': rf_predictions.flatten(),
-      'Decision Tree': dt_predictions.flatten()})
-
-  fig = px.box(predictions_df.melt(var_name='Model', value_name='Predicted Value'), 
-             x='Model', y='Predicted Value', color='Model',
-             color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'},
-             labels={'Model': 'Model', 'Predicted Value': 'Predicted Value'},
-             title='Distribution of predicted values for the three models')
-
-  fig.update_layout(height=600, width=800)
-
-  st.plotly_chart(fig)
-
-
+  st.write("\n\n\n")
 
 #Scatter plots of Predicted vs. Actual Values with Diagonal Line
+  
+  st.write ('**Scatter plots of Predicted vs. Actual Values with Diagonal Line**')
 
   fig, axs = plt.subplots(1, 3, figsize=(15, 5))
 
@@ -577,8 +560,6 @@ if page == pages[3] :
   axs[2].set_ylabel('Actual Values')
 
   plt.subplots_adjust(wspace=0.5)
-  fig.suptitle('Scatter plots of Predicted vs. Actual Values with Diagonal Line')
-
   st.pyplot(fig)
 
   st.write ("In the scatter plots, the Linear Regression and Random Forest models exhibit a similar shape, with the Random Forest plot showing predictions closer to the 45-degree line, indicating higher accuracy. The Decision Tree plot, however, appears different due to its algorithm, which operates using a sequence of if-else conditions. While the diagonal line represents perfect predictions, the Decision Tree's predictions deviate significantly, indicating lower accuracy compared to the other models.")
@@ -610,25 +591,13 @@ if page == pages[3] :
 
   df_model_errors = pd.DataFrame(data)
 
-# Plot Mean Squared Error
-  fig_mse = px.scatter(df_model_errors, x='Model', y='MSE', color='Model', title='Mean Squared Error for all three models',
-                     labels={'Model': 'Model', 'MSE': 'Mean Squared Error'},
-                     color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
-  st.plotly_chart(fig_mse)
-
-# Plot Root Mean Squared Error
-  fig_rmse = px.scatter(df_model_errors, x='Model', y='RMSE', color='Model', title='Root Mean Squared Error for all three models',
-                      labels={'Model': 'Model', 'RMSE': 'Root Mean Squared Error'},
-                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
-  st.plotly_chart(fig_rmse)
-
 # Plot Mean Absolute Error
   fig_mae = px.scatter(df_model_errors, x='Model', y='MAE', color='Model', title='Mean Absolute Error for all three models',
                      labels={'Model': 'Model', 'MAE': 'Mean Absolute Error'},
                      color_discrete_map={'Linear Regression': 'red', 'Random Forest': 'blue', 'Decision Tree': 'green'})
   st.plotly_chart(fig_mae)
 
-  st.write("The accuracy of our predictions correlates with lower error values. Random Forest and Linear Regression have lower errors than Decision Tree, therefore we can say those two are more accurate.")
+  st.write("The accuracy of our predictions correlates with lower error values. Random Forest and Linear Regression have a lower Mean Absolute Error (as well as MSE and RMSE) than Decision Tree, therefore we can say those two are more accurate.")
     
   st.write("\n\n\n")
   st.subheader ("Hyperparameter tuning")
@@ -667,20 +636,8 @@ if page == pages[3] :
   fig_mae.add_trace(go.Scatter(x=models, y=mae_before, mode='markers', marker=dict(color='blue'), name='MAE Before Tuning'))
   fig_mae.add_trace(go.Scatter(x=models, y=mae_after, mode='markers', marker=dict(color='red'), name='MAE After Tuning'))
   fig_mae.update_layout(title='MAE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MAE')
-
-  fig_mse = go.Figure()
-  fig_mse.add_trace(go.Scatter(x=models, y=mse_before, mode='markers', marker=dict(color='blue'), name='MSE Before Tuning'))
-  fig_mse.add_trace(go.Scatter(x=models, y=mse_after, mode='markers', marker=dict(color='red'), name='MSE After Tuning'))
-  fig_mse.update_layout(title='MSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='MSE')
-
-  fig_rmse = go.Figure()
-  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_before, mode='markers', marker=dict(color='blue'), name='RMSE Before Tuning'))
-  fig_rmse.add_trace(go.Scatter(x=models, y=rmse_after, mode='markers', marker=dict(color='red'), name='RMSE After Tuning'))
-  fig_rmse.update_layout(title='RMSE Before and After Hyperparameter Tuning', xaxis_title='Model', yaxis_title='RMSE')
-
   st.plotly_chart(fig_mae, use_container_width=True)
-  st.plotly_chart(fig_mse, use_container_width=True)
-  st.plotly_chart(fig_rmse, use_container_width=True)
+
 
 
 #Creation of Interpretation page
