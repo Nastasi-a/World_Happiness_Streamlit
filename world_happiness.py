@@ -393,17 +393,16 @@ if page == pages[2] :
     feature_importance_with_names.sort(key=lambda x: x[1], reverse=True)
 
     #Getting the encoded feature names
-
-    df_no_cat = df.drop(columns=cat)
+    df_no_cat = df.drop(['Ladder score', 'Regional indicator', 'Country name'], axis=1)
     df_encoded = pd.concat([df_no_cat, X_train_encoded_df], axis=1)
-    st.dataframe(df_encoded)
 
     # Print feature importance and variable name
     st.write("**15 Features with highest Importance:**")
-    column_names = df_encoded.columns[[2, 4, 8, 3, 12, 5, 7, 9, 6, 1, 85, 150, 38, 15, 58]].tolist()
-    for feature, importance in feature_importance_with_names[:15]:
-        # Choose the corresponding column name based on the index of the current feature
-        name = column_names[feature]
+    column_names = df_encoded.columns[[1, 3, 7, 2, 11, 4, 6, 8, 5, 0, 84, 149, 37, 14, 57]].tolist()
+    min_length = min(len(feature_importance_with_names), len(column_names))
+    for i in range(min_length):
+        feature, importance = feature_importance_with_names[i]
+        name = column_names[i]
         st.write(f"Feature: {feature}, {name}, Importance: {importance}")
 
 
